@@ -46,7 +46,12 @@ const splitLink = split(
 const client = new ApolloClient({
   link: splitLink,
   // link: authLink.concat(splitLink),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  // defaultOptions: {
+  //   watchQuery: {
+  //     nextFetchPolicy: 'cache-only',
+  //   },
+  // },
 })
 
 export default client

@@ -1,5 +1,7 @@
-import "@/src/myApp/styles/index.scss";
+import '@momecap/ui-kit-snapmoment/dist/style.css'
 import {Metadata} from "next";
+import {Header} from "@/widget/header/Header";
+import "../src/myApp/styles/index.scss";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,6 +20,7 @@ export default function RootLayout({
         <link rel="icon" data-rh={'true'} href="./favicon.ico"/>
       </head>
       <body>
+        <Header/>
         {children}
       </body>
     </html>

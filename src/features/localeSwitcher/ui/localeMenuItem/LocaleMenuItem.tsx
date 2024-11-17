@@ -1,9 +1,10 @@
+"use client"
 /*import Typography from '@/components/ui/Typography/Typography';*/
 import { FullName } from '@/features';
-import { Typography } from '@/shared/ui';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 import s from '@/features/localeSwitcher/ui/LocaleSwitcher.module.scss';
+import {Typography} from "@momecap/ui-kit-snapmoment";
 
 type DropdownMenuItemProps = {
   fullName: FullName;

@@ -13,4 +13,5 @@ export const Wrapper = (props: Props) => {
   const { children, className, variant = 'boxContent' } = props;
 
   return <div className={clsx(s[variant], className)}>{children}</div>;
+  // return <div className={`${s[variant]} ${className}`} >{children}</div>;
 };

@@ -1,7 +1,7 @@
+import {SignIn} from "@/pagesComponents/signIn/ui/SignIn";
+
 export default function Page() {
   return (
-    <h1>
-      Not authorized
-    </h1>
+    <SignIn/>
   );
 }
