@@ -15,6 +15,7 @@
     "@apollo/client": "^3.11.10",
     "@fontsource/inter": "^5.0.18",
     "@fontsource/roboto": "^5.0.13",
+    "@graphql-codegen/near-operation-file-preset": "^3.0.0",
     "@momecap/ui-kit-snapmoment": "^0.0.9",
     "@radix-ui/colors": "^3.0.0",
     "@radix-ui/react-checkbox": "^1.1.2",
