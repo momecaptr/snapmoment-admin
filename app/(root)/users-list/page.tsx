@@ -1,5 +1,7 @@
+import {UsersList} from "@/pagesComponents/usersList/UsersList";
+
 export default function Page () {
   return (
-    <h1>USERS LIST</h1>
+    <UsersList/>
   )
 }

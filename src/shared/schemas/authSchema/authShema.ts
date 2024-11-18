@@ -6,6 +6,7 @@ const errorMessages = {
   invalidEmail: 'Invalid email address',
   invalidEmailFormat: 'Invalid email format',
   invalidPasswordCharacters: 'Password cannot contain Cyrillic characters',
+  invalidPassword: 'Wrong password',
   invalidUsernameCharacters: 'Username can only contain letters, numbers, and underscores',
   passwordLowercase: 'Password must contain at least one lowercase letter',
   passwordMaxLength: 'Your password must be between 6 and 20 characters',
@@ -30,6 +31,12 @@ const commonPasswordRules = z
   .regex(/[a-z]/, { message: errorMessages.passwordLowercase })
   .regex(/[0-9]/, { message: errorMessages.passwordNumber })
   .regex(/[^A-Za-z0-9]/, { message: errorMessages.passwordSpecialChar });
+
+const adminPasswordRules = z
+  .string()
+  .refine((val) => val === "admin", {
+    message: "Wrong password",
+  });
 
 const commonEmailRules = z
   .string()
@@ -74,6 +81,11 @@ export const signInSchema = z.object({
   password: commonPasswordRules
 });
 
+export const signInAdminSchema = z.object({
+  email: commonEmailRules,
+  password: adminPasswordRules
+});
+
 export const signUpSchema = z
   .object({
     agreementPolicyStatus: commonAgreementPolicyStatusRules,
@@ -90,6 +102,7 @@ export const signUpSchema = z
 // Типы данных
 export type SignUpSchemaType = z.infer<typeof signUpSchema>;
 export type SignInSchemaType = z.infer<typeof signInSchema>;
+export type SignInAdminSchemaType = z.infer<typeof signInAdminSchema>;
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 export type CreateNewPasswordFormValues = z.infer<typeof createNewPasswordSchema>;
 export type ResendCreatePasswordType = z.infer<typeof resendCreatePasswordSchema>;

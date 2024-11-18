@@ -1,6 +1,7 @@
 "use client"
 import {ApolloProvider} from "@apollo/client";
 import client from "../../apollo-client";
+import {Toaster} from "sonner";
 
 export default function HomeLayout({
  children,
@@ -12,6 +13,7 @@ export default function HomeLayout({
       {/*<body className={`${geistSans.variable} ${geistMono.variable}`}>*/}
       <ApolloProvider client={client}>
         {children}
+        <Toaster position={'bottom-left'} />
       </ApolloProvider>
     </main>
   );

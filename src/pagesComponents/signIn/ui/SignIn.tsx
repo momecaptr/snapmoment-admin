@@ -1,62 +1,14 @@
 "use client"
 
-import NotFound from '@/../app/not-found';
 import { useSignInForm } from '../lib/hooks/useSignInForm';
-import Link from 'next/link';
 
 import s from './SignIn.module.scss';
 import {Button, Card, FormTextfield, Typography} from "@momecap/ui-kit-snapmoment";
-import {useForm} from "react-hook-form";
-import {signInSchema, SignInSchemaType} from "@/shared/schemas";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {useRouter} from "next/navigation";
-import {useLoginAdminMutation} from "@/graphql/queries/loginAdmin.generated";
-import {useCustomToast} from "@/shared/lib";
 
 export const SignIn = () => {
-  // const { control, handleSubmit, isLoading, isValid, onSubmit } = useSignInForm();
+  const { control, handleSubmit, isLoading, isValid, onSubmit } = useSignInForm();
 
-  const {
-    control,
-    formState: { errors, isValid },
-    handleSubmit
-  } = useForm<SignInSchemaType>({
-    mode: 'onChange',
-    resolver: zodResolver(signInSchema)
-  });
-
-  const router = useRouter()
-  const [login, { error, loading }] = useLoginAdminMutation();
-  // const { showToast } = useCustomToast(); // TODO: Поменять на другое??? Не работает
-  // showToast({message: 'ЗДАРОВА АТЕЦ', type: 'success'});
-
-  const onSubmit = async (data: SignInSchemaType) => {
-    // REFETCH QUERIES НАДО??? -- позволяет выполнить другие запросы сразу после выполнения этого запроса; также позволяет создать параметры для context-а -- а мы помним, что нужно указывать authorization
-    const res = await login(
-      {
-        variables: {
-          email: data.email, password: data.password
-        },
-        onCompleted: (res) => {
-          // СЮДА ТО Я ПОПАДАЮ, ЗНАЧИТ ЗАПРОС РАЗРЕШАЕТСЯ УСПЕШНО. Но почему Logged = false?
-          console.log('УСПЕХ')
-          console.log({oncomplete: res})
-        },
-        onError: (e) => {
-          console.log(e)
-          console.log('КОСЯК, БРАТ')
-        },
-        // refetchQueries: [
-        //   {
-        //     context: {base64UsernamePassword: btoa(`${data.email}:${data.password}`)},
-        //     query: 'GET USERS'
-        //   }
-        // ]
-      })
-  };
-
-  // if (isLoading) {
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 

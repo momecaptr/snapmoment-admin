@@ -1,5 +1,3 @@
-// "use client"
-
 import {ApolloClient, createHttpLink, InMemoryCache, split} from "@apollo/client" // Это чо за хуита????
 import { setContext } from '@apollo/client/link/context' // Это зачем?
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions' // Это зачем?
@@ -11,7 +9,6 @@ const httpLink = createHttpLink({
 })
 
 const wsLink = new GraphQLWsLink(createClient({
-  // url: 'ws://localhost:4000/subscriptions' // ЭТО НАХУЯ??? Говорит в видосе пока не обращать внимания
   url: 'ws://inctagram.work/api/v1/graphql', // ЭТО НАХУЯ??? Говорит в видосе пока не обращать внимания
 }))
 
@@ -39,13 +36,11 @@ const splitLink = split(
     )
   },
   wsLink,
-  authLink.concat(httpLink)
-  // httpLink
+  httpLink
 )
 
 const client = new ApolloClient({
-  link: splitLink,
-  // link: authLink.concat(splitLink),
+  link: authLink.concat(splitLink),
   cache: new InMemoryCache(),
   // defaultOptions: {
   //   watchQuery: {
