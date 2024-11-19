@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useCustomToast } from '@/shared/lib';
-import { SignInSchemaType, signInSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {useRouter} from "next/navigation";
 import {useLoginAdminMutation} from "@/graphql/queries/loginAdmin.generated";

@@ -1,5 +1,3 @@
-"use client"
-/*import Typography from '@/components/ui/Typography/Typography';*/
 import { FullName } from '@/features';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 

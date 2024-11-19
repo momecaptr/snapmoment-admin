@@ -3,7 +3,8 @@
 import { useSignInForm } from '../lib/hooks/useSignInForm';
 
 import s from './SignIn.module.scss';
-import {Button, Card, FormTextfield, Typography} from "@momecap/ui-kit-snapmoment";
+import {Button, Card, Typography} from "@momecap/ui-kit-snapmoment";
+import {FormTextfield} from "@/shared/ui";
 
 export const SignIn = () => {
   const { control, handleSubmit, isLoading, isValid, onSubmit } = useSignInForm();
