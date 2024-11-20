@@ -1,14 +1,20 @@
-import React, { useMemo } from 'react';
+import React, {ReactNode, useMemo} from 'react';
 
 import { clsx } from 'clsx';
 
 import s from './UniversalTable.module.scss';
 import {TableParts, Typography} from "@momecap/ui-kit-snapmoment";
+import {AdditionalDataSingleObj} from "@/pagesComponents/usersList/UsersList";
+import {EmptyTable} from "@/shared/ui/universalTable/ui/EmptyTable";
+import {Loading} from "@/shared/ui";
 
 interface UniversalTableProps<T> {
   colsStyles?: string;
   data: T[];
   tHeadStyles?: string;
+  customRows?: ReactNode;
+  emptyTableMessage?: string;
+  isLoading?: boolean
 }
 
 // Функция для создания заголовка колонки таблицы на основе типа данных. Добавление пробелов перед заглавными буквами,
@@ -26,42 +32,83 @@ const getHeader = (value: string) => {
  * @constructor
  */
 // Универсальный компонент таблицы
-export const UniversalTable = <T extends object>(props: UniversalTableProps<T>) => {
-  const { colsStyles, data, tHeadStyles } = props;
+export const UniversalTable = <T extends object>(
+  props: UniversalTableProps<T>
+) => {
+  const { colsStyles, data, customRows, tHeadStyles, emptyTableMessage = 'No data', isLoading } = props;
 
-  // Создаем колонки на основе ключей первого элемента данных
-  const columns = useMemo(() => (data.length > 0 ? Object.keys(data[0]) : []), [JSON.stringify(data)]);
+  // Создаем заголовки и колонки на основе ключей первого элемента данных
+  // Заголовки колонок
+  const headers = useMemo(() => {
+    if (data.length > 0) {
+      return Object.keys(data[0]).map((key) =>
+        key === 'lastColumnWithButtons' ? '' : key
+      ) as string[]; // Заголовки строк
+    } else {
+      return [];
+    }
+  }, [data]);
+
+  // Колонки данных
+  const columns = useMemo(() => {
+    return data.length > 0 ? Object.keys(data[0]) as (keyof T)[] : []; // Все ключи из объектов данных в виде массива
+  }, [data]);
+
+  console.log(columns)
 
   return (
     <div className={s.tableContainer}>
       <TableParts.Root className={s.table}>
         <TableParts.Head className={clsx(tHeadStyles)}>
           <TableParts.Row>
-            {columns.map((column) => (
-              <TableParts.HeadCell className={colsStyles} key={column}>
-                <Typography variant={'medium_text_14'}>{getHeader(column)}</Typography>
+            {headers.map((header) => (
+              <TableParts.HeadCell className={colsStyles} key={header as string}>
+                <Typography variant={'medium_text_14'}>{getHeader(header as string)}</Typography>
               </TableParts.HeadCell>
             ))}
           </TableParts.Row>
         </TableParts.Head>
-        <TableParts.Body>
-          {data.map((row, rowIndex) => (
-            <TableParts.Row key={rowIndex}>
-              {columns.map((column, colIndex) => (
-                <TableParts.Cell className={colsStyles} key={`${rowIndex}-${column}`}>
-                  {/*{formatCellData(String(row[column as keyof T]))}*/}
-                  {/* Отображение крестика в первой колонке, если isBlocked === true */}
-                  {/*{colIndex === 0 && row[column as keyof T] ? (*/}
-                  {/*  <span>❌</span>*/}
-                  {/*) : (*/}
-                  {/*  String(row[column as keyof T])*/}
-                  {/*)}*/}
-                  {String(row[column as keyof T])}
-                </TableParts.Cell>
-              ))}
-            </TableParts.Row>
-          ))}
-        </TableParts.Body>
+        {
+          isLoading ? (
+            <EmptyTable dataLength={columns.length}>
+              <Loading />
+            </EmptyTable>
+          ) : (
+            <>
+              {data && data.length !== 0 ? (
+                <TableParts.Body>
+                  {
+                    customRows ? (
+                      <>
+                        {customRows}
+                      </>
+                    ) : (
+                      <>
+                        {data.map((row, rowIndex) => (
+                          <TableParts.Row key={rowIndex}>
+                            {columns.map((column, colIndex) => (
+                              <TableParts.Cell className={colsStyles} key={`${rowIndex}-${column as string}`}>
+                                {React.isValidElement(row[column]) ? (
+                                  row[column]
+                                ) : (
+                                  <Typography variant={'medium_text_14'}>{row[column] as string}</Typography>
+                                )}
+                              </TableParts.Cell>
+                            ))}
+                          </TableParts.Row>
+                        ))}
+                      </>
+                    )
+                  }
+                </TableParts.Body>
+              ) : (
+                <EmptyTable dataLength={columns.length}>
+                  <Typography variant={'medium_text_14'} className={s.empty}>{emptyTableMessage}</Typography>
+                </EmptyTable>
+              )}
+            </>
+          )
+        }
       </TableParts.Root>
     </div>
   );

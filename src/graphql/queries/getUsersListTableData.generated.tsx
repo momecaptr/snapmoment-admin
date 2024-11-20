@@ -13,7 +13,7 @@ export type GetUsersListTableQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetUsersListTableQuery = { __typename?: 'Query', getUsers: { __typename?: 'UsersPaginationModel', users: Array<{ __typename?: 'User', id: number, userName: string, createdAt: any, profile: { __typename?: 'Profile', userName?: string | null, firstName?: string | null, lastName?: string | null } }>, pagination: { __typename?: 'PaginationModel', pagesCount: number, page: number, pageSize: number, totalCount: number } } };
+export type GetUsersListTableQuery = { __typename?: 'Query', getUsers: { __typename?: 'UsersPaginationModel', users: Array<{ __typename?: 'User', id: number, userName: string, createdAt: any, userBan?: { __typename?: 'UserBan', reason: string, createdAt: any } | null, profile: { __typename?: 'Profile', userName?: string | null, firstName?: string | null, lastName?: string | null } }>, pagination: { __typename?: 'PaginationModel', pagesCount: number, page: number, pageSize: number, totalCount: number } } };
 
 
 export const GetUsersListTableDocument = gql`
@@ -28,6 +28,11 @@ export const GetUsersListTableDocument = gql`
   ) {
     users {
       id
+      userName
+      userBan {
+        reason
+        createdAt
+      }
       profile {
         userName
         firstName

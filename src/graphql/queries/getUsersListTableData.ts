@@ -20,6 +20,10 @@ export const GET_USERS_LIST_TABLE = gql`
             users {
                 id
                 userName
+                userBan {
+                    reason
+                    createdAt
+                }
                 profile {
                     userName
                     firstName
