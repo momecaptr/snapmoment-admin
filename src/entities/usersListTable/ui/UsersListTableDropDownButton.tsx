@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React from 'react';
 import {
   Button,
   CustomDropdownItem, CustomDropdownWrapper,
@@ -16,27 +16,27 @@ export const UsersListTableDropDownButton = () => {
       <CustomDropdownWrapper
         trigger={
           <div className={s.opener}>
-            <MoreHorizontal style={{ height: '24px', width: '24px' }} />
+            <MoreHorizontal height={24} width={24} />
           </div>
         }
         align={'end'}
-        className={s.contentAspectsWrapper}
-        classNameTriggerActive={s.contentAspectsWrapperActiveTrigger}
+        className={s.usersListDdWrapper}
+        classNameTriggerActive={s.usersListDdWrapperWrapperActiveTrigger}
         isArrow={false}
         sideOffset={2}
       >
           <CustomDropdownItem
-            className={clsx(s.contentAspects)}
+            className={clsx(s.usersListDdItem)}
           >
-            <Button variant={'text'} className={s.aspectWrapper} onClick={() => {console.log(`delete`)}}>
+            <Button variant={'text'} className={s.button} onClick={() => {console.log(`delete`)}}>
               <PersonRemove className={s.icon} height={24} width={24} />
               <Typography variant={'regular_text_14'}>Delete user</Typography>
             </Button>
-            <Button variant={'text'} className={s.aspectWrapper} onClick={() => {console.log(`ban`)}}>
+            <Button variant={'text'} className={s.button} onClick={() => {console.log(`ban`)}}>
               <CircleBackslashIcon className={s.icon} height={24} width={24} />
               <Typography variant={'regular_text_14'}>Ban in the system</Typography>
             </Button>
-            <Button variant={'text'} className={s.aspectWrapper} onClick={() => {console.log(`more`)}}>
+            <Button variant={'text'} className={s.button} onClick={() => {console.log(`more`)}}>
               <MoreHorizontal className={s.icon} height={24} width={24} />
               <Typography variant={'regular_text_14'}>More Information</Typography>
             </Button>

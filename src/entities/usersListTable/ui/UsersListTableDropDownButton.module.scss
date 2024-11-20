@@ -14,22 +14,22 @@
   }
 }
 
-.contentAspectsWrapper {
+.usersListDdWrapper {
   padding: 5px;
   background-color: var(--dark-500);
   border-radius: 7px;
 }
 
-.contentAspectsWrapperActiveTrigger {
+.usersListDdWrapperWrapperActiveTrigger {
   background-color: var(--dark-300);
 }
 
-.contentAspects {
+.usersListDdItem {
   display: flex;
   flex-direction: column;
   padding: 0;
 
-  .aspectWrapper {
+  .button {
     display: flex;
     gap: 15px;
     justify-content: flex-start;
