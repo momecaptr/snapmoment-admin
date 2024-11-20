@@ -21,6 +21,7 @@ export const UsersListTableDropDownButton = () => {
         }
         align={'end'}
         className={s.contentAspectsWrapper}
+        classNameTriggerActive={s.contentAspectsWrapperActiveTrigger}
         isArrow={false}
         sideOffset={2}
       >
@@ -29,15 +30,15 @@ export const UsersListTableDropDownButton = () => {
           >
             <Button variant={'text'} className={s.aspectWrapper} onClick={() => {console.log(`delete`)}}>
               <PersonRemove className={s.icon} height={24} width={24} />
-              <Typography variant={'regular_text_16'}>Delete user</Typography>
+              <Typography variant={'regular_text_14'}>Delete user</Typography>
             </Button>
             <Button variant={'text'} className={s.aspectWrapper} onClick={() => {console.log(`ban`)}}>
               <CircleBackslashIcon className={s.icon} height={24} width={24} />
-              <Typography variant={'regular_text_16'}>Ban in the system</Typography>
+              <Typography variant={'regular_text_14'}>Ban in the system</Typography>
             </Button>
             <Button variant={'text'} className={s.aspectWrapper} onClick={() => {console.log(`more`)}}>
               <MoreHorizontal className={s.icon} height={24} width={24} />
-              <Typography variant={'regular_text_16'}>More Information</Typography>
+              <Typography variant={'regular_text_14'}>More Information</Typography>
             </Button>
           </CustomDropdownItem>
       </CustomDropdownWrapper>

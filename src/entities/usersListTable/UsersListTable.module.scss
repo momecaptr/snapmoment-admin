@@ -1,0 +1,11 @@
+.userIdCell{
+  display: flex;
+  align-items: center;
+  .userBanIcon {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 36px;
+    height: 100%;
+  }
+}

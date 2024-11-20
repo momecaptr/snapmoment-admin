@@ -5,6 +5,8 @@ import {useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData
 import {SortDirection, User, UserBlockStatus} from "@/graphql/types";
 import {UniversalTable} from "@/shared/ui";
 import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
+import {CircleBackslashIcon} from "@radix-ui/react-icons";
+import s from './UsersListTable.module.scss'
 
 export const UsersListTable = () => {
   const accessKey = localStorage.getItem('accessKey')
@@ -73,10 +75,17 @@ export const UsersListTable = () => {
   // const transformedData: TransformedDataSingleObj[] = datatatata
   //   ? datatatata.map((item) => {
       return {
-        userId: <Typography variant={'medium_text_14'}>
-          {item.userBan?.reason && <span>❌</span>}
-          {item.id}
-        </Typography>,
+        userId:(
+          <div className={s.userIdCell}>
+            <div className={s.userBanIcon} >
+              {item.userBan?.reason && <CircleBackslashIcon width={'24px'} height={'24px'}/> }
+            </div>
+            <Typography variant={'medium_text_14'}>
+              {item.id}
+            </Typography>
+          </div>
+        )
+      ,
         username: conditionalName({
           firstName: item.profile.firstName,
           lastName: item.profile.lastName,
