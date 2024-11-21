@@ -57,8 +57,6 @@ export const UniversalTable = <T extends object>(
     return data.length > 0 ? Object.keys(data[0]) as (keyof T)[] : []; // Все ключи из объектов данных в виде массива
   }, [data]);
 
-  console.log(columns)
-
   const handleIsBlockHead = (title: string) => {
     return title.toLowerCase() === 'username' || title.length === 0
   }

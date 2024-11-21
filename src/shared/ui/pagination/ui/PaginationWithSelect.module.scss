@@ -1,0 +1,28 @@
+.lastText {
+  margin-left: 1rem;
+}
+
+.firstText {
+  margin-right: 1rem;
+}
+
+.box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  align-items: center;
+  justify-content: center;
+
+  &.boxLeft {
+    justify-content: flex-start;
+  }
+
+  &.boxRight {
+    justify-content: flex-end;
+  }
+}
+
+.boxItem {
+  display: flex;
+  align-items: center;
+}

@@ -1,62 +1,26 @@
 "use client"
 import {ChangeEvent, ReactElement, useState} from "react";
 import {Input, Typography} from "@momecap/ui-kit-snapmoment";
-import {useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData.generated";
+import {GetUsersListTableQuery, useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData.generated";
 import {SortDirection, User, UserBlockStatus} from "@/graphql/types";
 import {UniversalTable} from "@/shared/ui";
 import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import s from './UsersListTable.module.scss'
 import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
+import {ApolloError} from "@apollo/client";
 
-export const selectOptionPagination = [
-  { text: '5', value: '5' },
-  { text: '10', value: '10' },
-  { text: '15', value: '15' },
-  { text: '30', value: '30' },
-  { text: '50', value: '50' },
-]
-const initialPageSize = '10'
-export const initCurrentPage = '1'
-const initialSortBy: keyof User  = 'userName'
+type Props = {
+  data: GetUsersListTableQuery | undefined,
+  loading: boolean,
+  error: ApolloError | undefined
+}
 
-export const UsersListTable = () => {
-  const accessKey = localStorage.getItem('accessKey')
+export const UsersListTable = (props: Props) => {
+  const { data, loading, error } = props
 
-  const {currentSortBy, itemsPerPage, currentPage, debouncedSearchValue, setSortByQuery} = useQueryParams()
-  const [tempSortBy, newSortDirection] = currentSortBy.split('-')
-  const newSortBy = () => {
-    switch (tempSortBy){
-      case 'userId': {
-        return 'id'
-      };
-      case 'profileLink': {
-        return 'userName'
-      };
-      case 'dateAdded': {
-        return 'createdAt'
-      };
-      default: {
-        return ''
-      }
-    }
-  }
+  const {setSortByQuery} = useQueryParams()
 
-  const {data, loading, error} =  useGetUsersListTableQuery({
-    variables: {
-      searchTerm: debouncedSearchValue, // debouncedSearchValue
-      pageSize: +itemsPerPage, // itemsPerPage
-      pageNumber: +currentPage, // currentPage
-      sortBy: newSortBy(), // currentOrderBy тут и sortBy и direction
-      sortDirection: newSortDirection as SortDirection.Desc | SortDirection.Asc,
-      statusFilter: UserBlockStatus.All
-    },
-    context: {
-      base64UsernamePassword: accessKey
-    },
-    skip: !accessKey
-  })
-  console.log({data})
 
   type TransformedDataSingleObj = {
     userId: ReactElement,
@@ -87,6 +51,7 @@ export const UsersListTable = () => {
         userId:(
           <div className={s.userIdCell}>
             <div className={s.userBanIcon} >
+              {<>{console.log(item.userBan?.reason)}</>}
               {item.userBan?.reason && <CircleBackslashIcon width={'24px'} height={'24px'}/> }
             </div>
             <Typography variant={'medium_text_14'}>

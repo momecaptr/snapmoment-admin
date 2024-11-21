@@ -1,0 +1,70 @@
+import { clsx } from 'clsx';
+
+import s from './PaginationWithSelect.module.scss';
+
+import { Pagination } from './paginationInitial/Pagination';
+import {SelectUI, Typography} from "@momecap/ui-kit-snapmoment";
+
+export type SelectOptionsType = {
+  text: string;
+  value: string;
+};
+
+type Props = {
+  alignment?: 'center' | 'left' | 'right';
+  pageNumber: number;
+  disabled?: boolean;
+  pageSize: number;
+  selectOptions: SelectOptionsType[];
+  setPageNumber: (value: number) => void;
+  setPageSize: (value: number) => void;
+  totalItems: number;
+};
+export const PaginationWithSelect = ({
+  alignment = 'center',
+  pageNumber,
+  disabled,
+  pageSize,
+  selectOptions,
+  setPageNumber,
+  setPageSize,
+  totalItems
+}: Props) => {
+  disabled = totalItems <= Number(selectOptions[0].value);
+  // const { currentPageSearchParam } = useQueryParams();
+
+  const totalPages = pageNumber === null && totalItems <= pageSize ? 1 : Math.ceil(totalItems / pageSize);
+
+  console.log({disabled, totalPages, pageNumber})
+
+  const onValueChange = (count: string) => {
+    setPageSize(+count);
+  };
+
+  const alignmentClass = () => {
+    if (alignment === 'left') {
+      return s.boxLeft;
+    } else if (alignment === 'right') {
+      return s.boxRight;
+    } else {
+      return '';
+    }
+  };
+
+  return (
+    <div className={clsx(s.box, alignmentClass())}>
+      <Pagination pageNumber={pageNumber} setPageNumber={setPageNumber} totalPages={totalPages} />
+      <div className={s.boxItem}>
+        <Typography className={s.firstText}>Show </Typography>
+        <SelectUI
+          className={'select'}
+          disabled={disabled}
+          onValueChange={onValueChange}
+          selectOptions={selectOptions}
+          value={pageSize.toString()}
+        />
+        <Typography className={s.lastText}>on page</Typography>
+      </div>
+    </div>
+  );
+};

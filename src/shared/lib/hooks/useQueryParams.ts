@@ -1,7 +1,7 @@
 "use client"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import {initCurrentPage, selectOptionPagination} from "@/entities/usersListTable/UsersListTable";
 import {useDebounce} from "./useDebounce";
+import {initCurrentPage, selectOptionPagination} from "@/pagesComponents/usersList/UsersList";
 
 export const useQueryParams = () => {
   const router = useRouter();
@@ -14,9 +14,9 @@ export const useQueryParams = () => {
 
   const query = Object.fromEntries(searchParams.entries());
 
-  const itemsPerPage = Number(query.itemsPerPage) ?? Number(selectOptionPagination[0].value);
-  const currentPage = Number(query.currentPage) ?? Number(initCurrentPage);
-  const currentPageSearchParam = query.currentPage;
+  const pageSize = query.pageSize ? Number(query.pageSize) : Number(selectOptionPagination[0].value);
+  const pageNumber = query.pageNumber ? Number(query.pageNumber) : Number(initCurrentPage);
+  const currentPageSearchParam = query.pageNumber;
   const searchTerm = query.searchTerm ?? '';
   const currentSortBy = query.sortBy ?? '';
 
@@ -37,20 +37,20 @@ export const useQueryParams = () => {
     const newQuery = new URLSearchParams(searchParams);
 
     if (currentPageQuery === Number(initCurrentPage)) {
-      newQuery.delete('currentPage');
+      newQuery.delete('pageNumber');
     } else {
-      newQuery.set('currentPage', currentPageQuery.toString());
+      newQuery.set('pageNumber', currentPageQuery.toString());
     }
     router.push(`${pathname}?${newQuery.toString()}`);
   };
 
-  const setItemsPerPageQuery = (itemsPerPageQuery: number) => {
+  const setPageSizeQuery = (pageSizeQuery: number) => {
     const newQuery = new URLSearchParams(searchParams);
 
-    if (itemsPerPageQuery === Number(selectOptionPagination[0].value)) {
-      newQuery.delete('itemsPerPage');
+    if (pageSizeQuery === Number(selectOptionPagination[0].value)) {
+      newQuery.delete('pageSize');
     } else {
-      newQuery.set('itemsPerPage', itemsPerPageQuery.toString());
+      newQuery.set('pageSize', pageSizeQuery.toString());
     }
     router.push(`${pathname}?${newQuery.toString()}`);
   };
@@ -81,13 +81,13 @@ export const useQueryParams = () => {
   };
 
   const clearQuery = () => {
-    const itemsPerPageValue = query.itemsPerPage;
+    const pageSizeValue = query.pageSize;
     const newQuery = new URLSearchParams(searchParams);
 
-    if (itemsPerPageValue) {
-      newQuery.set('itemsPerPage', Array.isArray(itemsPerPageValue) ? itemsPerPageValue.join(',') : itemsPerPageValue);
+    if (pageSizeValue) {
+      newQuery.set('pageSize', Array.isArray(pageSizeValue) ? pageSizeValue.join(',') : pageSizeValue);
     } else {
-      newQuery.delete('itemsPerPage');
+      newQuery.delete('pageSize');
     }
     router.push(`${pathname}?${newQuery.toString()}`);
   };
@@ -95,13 +95,13 @@ export const useQueryParams = () => {
   return {
     clearQuery,
     currentSortBy,
-    currentPage,
+    pageNumber,
     currentPageSearchParam,
     debouncedSearchValue,
-    itemsPerPage,
+    pageSize,
     searchTerm,
     setCurrentPageQuery,
-    setItemsPerPageQuery,
+    setPageSizeQuery,
     setSearchQuery,
     setSortByQuery
   };
