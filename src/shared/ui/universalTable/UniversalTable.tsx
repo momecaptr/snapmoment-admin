@@ -4,7 +4,6 @@ import { clsx } from 'clsx';
 
 import s from './UniversalTable.module.scss';
 import {TableParts, Typography} from "@momecap/ui-kit-snapmoment";
-import {AdditionalDataSingleObj} from "@/pagesComponents/usersList/UsersList";
 import {EmptyTable} from "@/shared/ui/universalTable/ui/EmptyTable";
 import {Loading} from "@/shared/ui";
 import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
