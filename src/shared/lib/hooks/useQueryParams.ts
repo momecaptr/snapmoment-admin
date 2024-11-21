@@ -17,10 +17,10 @@ export const useQueryParams = () => {
   const itemsPerPage = Number(query.itemsPerPage) ?? Number(selectOptionPagination[0].value);
   const currentPage = Number(query.currentPage) ?? Number(initCurrentPage);
   const currentPageSearchParam = query.currentPage;
-  const search = query.search ?? '';
+  const searchTerm = query.searchTerm ?? '';
   const currentSortBy = query.sortBy ?? '';
 
-  const debouncedSearchValue = useDebounce(search);
+  const debouncedSearchValue = useDebounce(searchTerm);
 
   const setSearchQuery = (searchQuery: string) => {
     const newQuery = new URLSearchParams(searchParams);
@@ -99,7 +99,7 @@ export const useQueryParams = () => {
     currentPageSearchParam,
     debouncedSearchValue,
     itemsPerPage,
-    search,
+    searchTerm,
     setCurrentPageQuery,
     setItemsPerPageQuery,
     setSearchQuery,

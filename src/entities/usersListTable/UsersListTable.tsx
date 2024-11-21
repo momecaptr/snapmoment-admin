@@ -1,6 +1,6 @@
 "use client"
-import {ReactElement, useState} from "react";
-import {Typography} from "@momecap/ui-kit-snapmoment";
+import {ChangeEvent, ReactElement, useState} from "react";
+import {Input, Typography} from "@momecap/ui-kit-snapmoment";
 import {useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData.generated";
 import {SortDirection, User, UserBlockStatus} from "@/graphql/types";
 import {UniversalTable} from "@/shared/ui";
