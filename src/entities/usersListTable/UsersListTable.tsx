@@ -1,23 +1,54 @@
 "use client"
-import {ReactElement} from "react";
-import { Typography } from "@momecap/ui-kit-snapmoment";
+import {ReactElement, useState} from "react";
+import {Typography} from "@momecap/ui-kit-snapmoment";
 import {useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData.generated";
 import {SortDirection, User, UserBlockStatus} from "@/graphql/types";
 import {UniversalTable} from "@/shared/ui";
 import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import s from './UsersListTable.module.scss'
+import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
+
+export const selectOptionPagination = [
+  { text: '5', value: '5' },
+  { text: '10', value: '10' },
+  { text: '15', value: '15' },
+  { text: '30', value: '30' },
+  { text: '50', value: '50' },
+]
+const initialPageSize = '10'
+export const initCurrentPage = '1'
+const initialSortBy: keyof User  = 'userName'
 
 export const UsersListTable = () => {
   const accessKey = localStorage.getItem('accessKey')
 
+  const {currentSortBy, itemsPerPage, currentPage, debouncedSearchValue, setSortByQuery} = useQueryParams()
+  const [tempSortBy, newSortDirection] = currentSortBy.split('-')
+  const newSortBy = () => {
+    switch (tempSortBy){
+      case 'userId': {
+        return 'id'
+      };
+      case 'profileLink': {
+        return 'userName'
+      };
+      case 'dateAdded': {
+        return 'createdAt'
+      };
+      default: {
+        return ''
+      }
+    }
+  }
+
   const {data, loading, error} =  useGetUsersListTableQuery({
     variables: {
-      searchTerm: '',
-      pageSize: 10,
-      pageNumber: 1,
-      sortBy: 'userName',
-      sortDirection: SortDirection.Asc,
+      searchTerm: debouncedSearchValue, // debouncedSearchValue
+      pageSize: +itemsPerPage, // itemsPerPage
+      pageNumber: +currentPage, // currentPage
+      sortBy: newSortBy(), // currentOrderBy тут и sortBy и direction
+      sortDirection: newSortDirection as SortDirection.Desc | SortDirection.Asc,
       statusFilter: UserBlockStatus.All
     },
     context: {
@@ -35,18 +66,7 @@ export const UsersListTable = () => {
     lastColumnWithButtons: ReactElement
   }
 
-  const formatPaymentType = (value: string) => {
-    const types: Record<string, string> = { PAYPAL: 'PayPal', STRIPE: 'Stripe' };
-    return types[value] || value;
-  };
-
   const formatDate = (value: any) => new Date(value).toLocaleDateString('ru-RU');
-
-  const formatSubscriptionType = (value: string) => {
-    const types: Record<string, string> = { DAY: '1 day', MONTHLY: '1 month', WEEKLY: '7 days' };
-
-    return types[value] || value;
-  };
 
   const conditionalName = ({firstName, lastName} : { firstName: string | null | undefined, lastName: string | null | undefined }) => {
     let value
@@ -61,19 +81,8 @@ export const UsersListTable = () => {
     return value
   }
 
-
-  const datatatata: User[] = [
-    {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'test', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'test888', createdAt: new Date(), email:'jopa@gmail.com'},
-    {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'sdfsdfsa', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'tes76t', createdAt: new Date(), email:'jopa@gmail.com'},
-    {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'dfhfh', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'tes543t', createdAt: new Date(), email:'jopa@gmail.com'},
-    {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'GG', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'tes423t', createdAt: new Date(), email:'jopa@gmail.com'},
-    {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'te', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'test123', createdAt: new Date(), email:'jopa@gmail.com'},
-  ]
-
   const transformedData: TransformedDataSingleObj[] = data
     ? data.getUsers.users.map((item) => {
-  // const transformedData: TransformedDataSingleObj[] = datatatata
-  //   ? datatatata.map((item) => {
       return {
         userId:(
           <div className={s.userIdCell}>
@@ -101,6 +110,12 @@ export const UsersListTable = () => {
     })
     : [];
 
+  const handleSortClick = (title: string) => {
+    if(title.toLowerCase() !== 'username' || title.length > 0) {
+      setSortByQuery(title);
+    }
+  }
+
   if(loading){
     return <div>Loading...</div>
   }
@@ -109,7 +124,26 @@ export const UsersListTable = () => {
     <div>
       <h1>ЭТА СТРАНИЦА, БРАТ</h1>
       {error && <p>{error.message}</p>}
-      <UniversalTable<TransformedDataSingleObj> data={transformedData}/>
+      <UniversalTable<TransformedDataSingleObj> disableHoverHeaderStyle={s.disableHoverHeaderStyle} data={transformedData} handleSortClick={handleSortClick} />
     </div>
   );
 };
+
+
+const formatPaymentType = (value: string) => {
+  const types: Record<string, string> = { PAYPAL: 'PayPal', STRIPE: 'Stripe' };
+  return types[value] || value;
+};
+const formatSubscriptionType = (value: string) => {
+  const types: Record<string, string> = { DAY: '1 day', MONTHLY: '1 month', WEEKLY: '7 days' };
+
+  return types[value] || value;
+};
+
+const mockData: User[] = [
+  {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'test', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'test888', createdAt: new Date(), email:'jopa@gmail.com'},
+  {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'sdfsdfsa', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'tes76t', createdAt: new Date(), email:'jopa@gmail.com'},
+  {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'dfhfh', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'tes543t', createdAt: new Date(), email:'jopa@gmail.com'},
+  {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'GG', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'tes423t', createdAt: new Date(), email:'jopa@gmail.com'},
+  {userBan: {reason: '', createdAt: ''}, id: 1, profile: {firstName: 'te', lastName: 'test', createdAt: new Date(), id: 54}, userName: 'test123', createdAt: new Date(), email:'jopa@gmail.com'},
+]

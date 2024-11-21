@@ -9,3 +9,10 @@
     height: 100%;
   }
 }
+
+.disableHoverHeaderStyle {
+  &:hover {
+    background-color: initial;
+    cursor: default;
+  }
+}

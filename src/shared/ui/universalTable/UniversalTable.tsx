@@ -7,6 +7,7 @@ import {TableParts, Typography} from "@momecap/ui-kit-snapmoment";
 import {AdditionalDataSingleObj} from "@/pagesComponents/usersList/UsersList";
 import {EmptyTable} from "@/shared/ui/universalTable/ui/EmptyTable";
 import {Loading} from "@/shared/ui";
+import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
 
 interface UniversalTableProps<T> {
   colsStyles?: string;
@@ -14,7 +15,9 @@ interface UniversalTableProps<T> {
   tHeadStyles?: string;
   customRows?: ReactNode;
   emptyTableMessage?: string;
-  isLoading?: boolean
+  isLoading?: boolean;
+  disableHoverHeaderStyle: string;
+  handleSortClick: (title: string) => void
 }
 
 // Функция для создания заголовка колонки таблицы на основе типа данных. Добавление пробелов перед заглавными буквами,
@@ -35,7 +38,7 @@ const getHeader = (value: string) => {
 export const UniversalTable = <T extends object>(
   props: UniversalTableProps<T>
 ) => {
-  const { colsStyles, data, customRows, tHeadStyles, emptyTableMessage = 'No data', isLoading } = props;
+  const { colsStyles, data, customRows, tHeadStyles, emptyTableMessage = 'No data', isLoading, handleSortClick, disableHoverHeaderStyle } = props;
 
   // Создаем заголовки и колонки на основе ключей первого элемента данных
   // Заголовки колонок
@@ -56,13 +59,23 @@ export const UniversalTable = <T extends object>(
 
   console.log(columns)
 
+  const handleIsBlockHead = (title: string) => {
+    return title.toLowerCase() === 'username' || title.length === 0
+  }
+
+  const headClickHandler = (title: string) => () => {
+    if(!handleIsBlockHead(title)){
+      handleSortClick(title)
+    }
+  }
+
   return (
     <div className={s.tableContainer}>
       <TableParts.Root className={s.table}>
         <TableParts.Head className={clsx(tHeadStyles)}>
           <TableParts.Row>
             {headers.map((header) => (
-              <TableParts.HeadCell className={colsStyles} key={header as string}>
+              <TableParts.HeadCell className={clsx(colsStyles, handleIsBlockHead(header) && disableHoverHeaderStyle)} key={header} onClick={headClickHandler(header)} >
                 <Typography variant={'medium_text_14'}>{getHeader(header as string)}</Typography>
               </TableParts.HeadCell>
             ))}
