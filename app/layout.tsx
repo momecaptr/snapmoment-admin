@@ -2,6 +2,7 @@ import '@momecap/ui-kit-snapmoment/dist/style.css'
 import {Metadata} from "next";
 import {Header} from "@/widget/header/Header";
 import "../src/myApp/styles/index.scss";
+import { Providers } from '../src/providers/Providers'; // Клиентский компонент с провайдерами
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,10 +21,11 @@ export default function RootLayout({
         <link rel="icon" data-rh={'true'} href="./favicon.ico"/>
       </head>
       <body>
-        <Header/>
-        <main>
-          {children}
-        </main>
+        {/* Оборачиваем всё приложение в клиентский компонент Providers */}
+        <Providers>
+          <Header/>
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );

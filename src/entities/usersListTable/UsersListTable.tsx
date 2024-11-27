@@ -52,7 +52,6 @@ export const UsersListTable = (props: Props) => {
         userId:(
           <div className={s.userIdCell}>
             <div className={s.userBanIcon} >
-              {<>{console.log(item.userBan?.reason)}</>}
               {item.userBan?.reason && <CircleBackslashIcon width={'24px'} height={'24px'}/> }
             </div>
             <Typography variant={'medium_text_14'}>
