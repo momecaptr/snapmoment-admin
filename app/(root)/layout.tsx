@@ -9,12 +9,12 @@ export default function HomeLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main>
+    <div>
       {/*<body className={`${geistSans.variable} ${geistMono.variable}`}>*/}
       <ApolloProvider client={client}>
         {children}
         <Toaster position={'bottom-left'} />
       </ApolloProvider>
-    </main>
+    </div>
   );
 }
