@@ -59,7 +59,7 @@ export const DeleteUserModal = (props: Props) => {
 
   return (
     <Modal className={s.card} onOpenChange={() => setOpen(false)} open={isOpen} title={'Delete Post'}>
-      {isRemoveLoading ? <Loading/> :
+      {isRemoveLoading ? <p>...Loading</p> :
         (
           <>
             <div className={s.text}>
