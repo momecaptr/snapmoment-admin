@@ -14,10 +14,11 @@ type Props = {
   data: GetUsersListTableQuery | undefined,
   loading: boolean,
   error: ApolloError | undefined
+  globalStyle?: string
 }
 
 export const UsersListTable = (props: Props) => {
-  const { data, loading, error } = props
+  const { data, loading, error, globalStyle } = props
 
   const {setSortByQuery} = useQueryParams()
 
@@ -86,8 +87,7 @@ export const UsersListTable = (props: Props) => {
   }
 
   return (
-    <div>
-      <h1>ЭТА СТРАНИЦА, БРАТ</h1>
+    <div className={globalStyle}>
       {error && <p>{error.message}</p>}
       <UniversalTable<TransformedDataSingleObj> disableHoverHeaderStyle={s.disableHoverHeaderStyle} data={transformedData} handleSortClick={handleSortClick} />
     </div>

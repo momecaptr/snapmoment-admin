@@ -1,0 +1,17 @@
+.usersListHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  .input {
+    width: 70%;
+    min-width: 300px;
+  }
+  .select {
+    width: 20%;
+  }
+}
+
+.tableGlobal {
+  margin-bottom: 36px;
+}

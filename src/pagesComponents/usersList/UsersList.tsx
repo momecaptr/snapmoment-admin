@@ -6,6 +6,7 @@ import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
 import {PaginationWithSelect} from "@/shared/ui";
 import {useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData.generated";
 import {SortDirection, UserBlockStatus} from "@/graphql/types";
+import s from './UsersList.module.scss'
 
 const selectOptionsBan = [
   {text: 'Not selected', value: 'ALL'},
@@ -89,10 +90,13 @@ export const UsersList = () => {
 
   return (
     <div>
-      <Input callback={setSearchQuery} onChange={handleSearchChange} type={'search'} currentValue={searchTerm}/>
-      <h1>Некоторое дерьмо</h1>
-      <SelectUI selectOptions={selectOptionsBan} value={banFilter} onValueChange={handleBanFilter}/>
-      <UsersListTable data={data} loading={loading} error={error}/>
+      <div className={s.usersListHeader}>
+        <Input callback={setSearchQuery} onChange={handleSearchChange} type={'search'} currentValue={searchTerm} className={s.input} />
+        <div className={s.select}>
+          <SelectUI selectOptions={selectOptionsBan} value={banFilter} onValueChange={handleBanFilter} />
+        </div>
+      </div>
+      <UsersListTable data={data} loading={loading} error={error} globalStyle={s.tableGlobal}/>
       {!loading && <PaginationWithSelect
         pageNumber={pageNumber}
         pageSize={pageSize}
@@ -100,6 +104,7 @@ export const UsersList = () => {
         setPageNumber={setCurrentPageQuery}
         setPageSize={setPageSizeQuery}
         totalItems={data?.getUsers.pagination.totalCount ?? 1}
+        alignment={'left'}
       />}
     </div>
   );
