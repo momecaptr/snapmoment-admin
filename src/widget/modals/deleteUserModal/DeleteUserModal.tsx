@@ -4,16 +4,16 @@ import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
 import {clsx} from "clsx";
 
 type Props = {
-  deleteUser: any;
+  deleteUser: (id: number) => void;
+  userId: any;
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
 };
 export const DeleteUserModal = (props: Props) => {
-  const { deleteUser, isOpen, setOpen } = props;
+  const { deleteUser, userId, isOpen, setOpen } = props;
 
   const yesHandler = () => {
     // deleteUser();
-    console.log('АВВЫАЫВАЫВАЫВА')
     setOpen(false);
   };
   const noHandler = () => {

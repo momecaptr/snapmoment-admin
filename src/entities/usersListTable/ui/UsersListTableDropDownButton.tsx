@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   CustomDropdownItem, CustomDropdownWrapper,
@@ -9,8 +8,20 @@ import {
 import {clsx} from "clsx";
 import s from './UsersListTableDropDownButton.module.scss'
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
+import {MouseEvent} from "react";
 
-export const UsersListTableDropDownButton = () => {
+type Props = {
+  userId: number,
+  actionTrigger: (id: number, actionName: string) => void
+}
+
+export const UsersListTableDropDownButton = (props: Props) => {
+  const { userId, actionTrigger }  = props
+
+  const commonHandler = (e: MouseEvent<HTMLButtonElement>) => {
+    const actionName = e.currentTarget.dataset.actionName
+    actionTrigger(userId, actionName || '')
+  }
   return (
     <>
       <CustomDropdownWrapper
@@ -28,15 +39,15 @@ export const UsersListTableDropDownButton = () => {
           <CustomDropdownItem
             className={clsx(s.usersListDdItem)}
           >
-            <Button variant={'text'} className={s.button} onClick={() => {console.log(`delete`)}}>
+            <Button variant={'text'} className={s.button} data-action-name={'delete'} onClick={commonHandler}>
               <PersonRemove className={s.icon} height={24} width={24} />
               <Typography variant={'regular_text_14'}>Delete user</Typography>
             </Button>
-            <Button variant={'text'} className={s.button} onClick={() => {console.log(`ban`)}}>
+            <Button variant={'text'} className={s.button} data-action-name={`ban`} onClick={commonHandler}>
               <CircleBackslashIcon className={s.icon} height={24} width={24} />
               <Typography variant={'regular_text_14'}>Ban in the system</Typography>
             </Button>
-            <Button variant={'text'} className={s.button} onClick={() => {console.log(`more`)}}>
+            <Button variant={'text'} className={s.button} data-action-name={`more`} onClick={commonHandler}>
               <MoreHorizontal className={s.icon} height={24} width={24} />
               <Typography variant={'regular_text_14'}>More Information</Typography>
             </Button>

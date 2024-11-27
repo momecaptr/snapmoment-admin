@@ -1,6 +1,6 @@
 "use client"
-import {ChangeEvent, ReactElement, useState} from "react";
-import {Input, Typography} from "@momecap/ui-kit-snapmoment";
+import {ChangeEvent, ReactElement, useEffect, useState} from "react";
+import {Button, Input, Typography} from "@momecap/ui-kit-snapmoment";
 import {GetUsersListTableQuery, useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData.generated";
 import {SortDirection, User, UserBlockStatus} from "@/graphql/types";
 import {UniversalTable} from "@/shared/ui";
@@ -9,6 +9,10 @@ import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import s from './UsersListTable.module.scss'
 import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
 import {ApolloError} from "@apollo/client";
+import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
+import {DeleteUserModal} from "@/widget/modals/deleteUserModal/DeleteUserModal";
+import {ModalKey, useModal} from "@/shared/lib/hooks/useModal";
+import {useRouter} from "next/navigation";
 
 type Props = {
   data: GetUsersListTableQuery | undefined,
@@ -18,10 +22,31 @@ type Props = {
 }
 
 export const UsersListTable = (props: Props) => {
+  const router = useRouter()
+  const [pickedId, setPickedId] = useState<number | undefined>()
   const { data, loading, error, globalStyle } = props
-
   const {setSortByQuery} = useQueryParams()
+  const { isOpen: isDeleteUserModalOpen, setOpen: setIsDeleteUserModalOpen } = useModal(ModalKey.DeleteUser);
 
+  // Remove User
+  const [removeUser, { loading: isRemoveLoading, error: isRemoveError }] = useRemoveUserMutation()
+
+  const removeUserHandler = async (id: number) => {
+    await removeUser({
+      variables: {
+        userId: id
+      },
+      refetchQueries: ['GetUsersListTable']
+    })
+  }
+
+  const actionTrigger = (id: number, actionName: string) => {
+    console.log({id, actionName})
+    setPickedId(id)
+    if(actionName === 'delete') {
+      setIsDeleteUserModalOpen(true)
+    }
+  }
 
   type TransformedDataSingleObj = {
     userId: ReactElement,
@@ -58,19 +83,14 @@ export const UsersListTable = (props: Props) => {
               {item.id}
             </Typography>
           </div>
-        )
-      ,
+        ),
         username: conditionalName({
           firstName: item.profile.firstName,
           lastName: item.profile.lastName,
         }),
         profileLink: item.profile.userName,
         dateAdded: formatDate(item.createdAt),
-        lastColumnWithButtons: (
-          <>
-            <UsersListTableDropDownButton />
-          </>
-        )
+        lastColumnWithButtons: <UsersListTableDropDownButton userId={item.id} actionTrigger={actionTrigger} />
       };
     })
     : [];
@@ -81,12 +101,17 @@ export const UsersListTable = (props: Props) => {
     }
   }
 
-  if(loading){
+  if(loading || isRemoveLoading){
     return <div>Loading...</div>
+  }
+
+  if(isRemoveError){
+    router.push('/404')
   }
 
   return (
     <div className={globalStyle}>
+      <DeleteUserModal deleteUser={removeUserHandler} isOpen={isDeleteUserModalOpen} setOpen={setIsDeleteUserModalOpen} userId={8675} />
       {error && <p>{error.message}</p>}
       <UniversalTable<TransformedDataSingleObj> disableHoverHeaderStyle={s.disableHoverHeaderStyle} data={transformedData} handleSortClick={handleSortClick} />
     </div>

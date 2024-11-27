@@ -9,6 +9,7 @@ import {SortDirection, UserBlockStatus} from "@/graphql/types";
 import s from './UsersList.module.scss'
 import {DeleteUserModal} from "@/widget/modals/deleteUserModal/DeleteUserModal";
 import {ModalKey, useModal} from "@/shared/lib/hooks/useModal";
+import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
 
 const selectOptionsBan = [
   {text: 'Not selected', value: 'ALL'},
@@ -26,8 +27,6 @@ export const initCurrentPage = '1'
 
 
 export const UsersList = () => {
-
-  const { isOpen: isDeleteUserModalOpen, setOpen: setIsDeleteUserModalOpen } = useModal(ModalKey.DeleteUser);
   const [banFilter, setBanFilter] = useState(selectOptionsBan[0].value)
 
   const accessKey = localStorage.getItem('accessKey')
@@ -64,7 +63,6 @@ export const UsersList = () => {
     },
     skip: !accessKey
   })
-  console.log({banFilter})
 
   useEffect(() => {
     if (data) {
@@ -90,11 +88,8 @@ export const UsersList = () => {
     setBanFilter(items)
   }
 
-
-
   return (
     <>
-      <DeleteUserModal deleteUser={'Ага'} isOpen={isDeleteUserModalOpen} setOpen={setIsDeleteUserModalOpen} />
       <div className={s.usersListHeader}>
         <Input callback={setSearchQuery} onChange={handleSearchChange} type={'search'} currentValue={searchTerm} className={s.input} />
         <div className={s.select}>
@@ -111,9 +106,6 @@ export const UsersList = () => {
         totalItems={data?.getUsers.pagination.totalCount ?? 1}
         alignment={'left'}
       />}
-      <Button onClick={() => setIsDeleteUserModalOpen(true)}>
-        Нннада
-      </Button>
     </>
   );
 };
