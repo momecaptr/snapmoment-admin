@@ -11,7 +11,7 @@ import {DeleteUserModal} from "@/widget/modals/deleteUserModal/DeleteUserModal";
 import {ModalKey, useModal} from "@/shared/lib/hooks/useModal";
 import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
 
-const selectOptionsBan = [
+export const selectOptionsBan = [
   {text: 'Not selected', value: 'ALL'},
   { text: 'Blocked', value: 'BLOCKED' },
   { text: 'Not blocked', value: 'UNBLOCKED' },
@@ -27,27 +27,8 @@ export const initCurrentPage = '1'
 
 
 export const UsersList = () => {
-  const [banFilter, setBanFilter] = useState(selectOptionsBan[0].value)
-
   const accessKey = localStorage.getItem('accessKey')
-  const {currentSortBy, pageSize, pageNumber, debouncedSearchValue, setSortByQuery, setSearchQuery, searchTerm, setPageSizeQuery, setCurrentPageQuery} = useQueryParams()
-  const [tempSortBy, newSortDirection] = currentSortBy.split('-')
-  const newSortBy = () => {
-    switch (tempSortBy){
-      case 'userId': {
-        return 'id'
-      };
-      case 'profileLink': {
-        return 'userName'
-      };
-      case 'dateAdded': {
-        return 'createdAt'
-      };
-      default: {
-        return ''
-      }
-    }
-  }
+  const {newSortBy, banFilter, setBanFilterQuery, newSortDirection, pageSize, pageNumber, debouncedSearchValue, setSortByQuery, setSearchQuery, searchTerm, setPageSizeQuery, setCurrentPageQuery} = useQueryParams()
 
   const {data, loading, error} =  useGetUsersListTableQuery({
     variables: {
@@ -55,7 +36,7 @@ export const UsersList = () => {
       pageSize: +pageSize, // Было itemsPerPage
       pageNumber: +pageNumber, // Было currentPage
       statusFilter: banFilter as UserBlockStatus,
-      sortBy: newSortBy(), // currentOrderBy тут и sortBy и direction
+      sortBy: newSortBy, // currentOrderBy тут и sortBy и direction
       sortDirection: newSortDirection as SortDirection.Desc | SortDirection.Asc,
     },
     context: {
@@ -85,7 +66,7 @@ export const UsersList = () => {
 
   const handleBanFilter = (items: string) => {
     setCurrentPageQuery(Number(initCurrentPage))
-    setBanFilter(items)
+    setBanFilterQuery(items)
   }
 
   return (

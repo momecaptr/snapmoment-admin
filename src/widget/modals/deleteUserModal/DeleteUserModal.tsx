@@ -4,6 +4,8 @@ import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
 import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
 import {Loading} from "@/shared/ui";
 import {useCustomToast} from "@/shared/lib";
+import {GET_USERS} from "@/graphql/queries/getUsersData";
+import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
 
 type Props = {
   userId: number|undefined;
@@ -13,16 +15,31 @@ type Props = {
 export const DeleteUserModal = (props: Props) => {
   const { userId, isOpen, setOpen } = props;
   const {showToast} = useCustomToast()
+  const {pageSize, pageNumber, newSortDirection, newSortBy, banFilter, debouncedSearchValue, setSortByQuery, setSearchQuery, searchTerm, setPageSizeQuery, setCurrentPageQuery} = useQueryParams()
+  console.log({userIdFromModal: userId})
 
   // Remove User
   const [removeUser, { loading: isRemoveLoading, error: errorWhileRemove }] = useRemoveUserMutation()
 
+
   const removeUserHandler = async () => {
     await removeUser({
+      context: { base64UsernamePassword: localStorage.getItem('accessKey') },
       variables: {
         userId: userId ?? 0
       },
-      refetchQueries: ['GetUsersListTable']
+      refetchQueries: [{
+        context: { base64UsernamePassword: localStorage.getItem('accessKey') },
+        query: GET_USERS,
+        variables: {
+          pageNumber: pageNumber,
+          pageSize: pageSize,
+          sortBy: newSortBy,
+          sortDirection: newSortDirection,
+          searchTerm: searchTerm,
+          statusFilter: banFilter
+        }
+      }]
     })
   }
 

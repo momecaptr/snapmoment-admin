@@ -1,7 +1,7 @@
 "use client"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {useDebounce} from "./useDebounce";
-import {initCurrentPage, selectOptionPagination} from "@/pagesComponents/usersList/UsersList";
+import {initCurrentPage, selectOptionPagination, selectOptionsBan} from "@/pagesComponents/usersList/UsersList";
 
 export const useQueryParams = () => {
   const router = useRouter();
@@ -19,6 +19,9 @@ export const useQueryParams = () => {
   const currentPageSearchParam = query.pageNumber;
   const searchTerm = query.searchTerm ?? '';
   const currentSortBy = query.sortBy ?? '';
+
+  // Получение значения бан-фильтра из параметров URL, или по умолчанию - 'ALL'
+  const banFilter = query.banFilter ? query.banFilter : selectOptionsBan[0].value;
 
   const debouncedSearchValue = useDebounce(searchTerm);
 
@@ -80,6 +83,35 @@ export const useQueryParams = () => {
     router.push(`${pathname}?${newQuery.toString()}`);
   };
 
+  const setBanFilterQuery = (banFilterQuery: string) => {
+    const newQuery = new URLSearchParams(searchParams);
+
+    if (banFilterQuery === selectOptionsBan[0].value) {
+      newQuery.delete('banFilter');
+    } else {
+      newQuery.set('banFilter', banFilterQuery);
+    }
+    router.push(`${pathname}?${newQuery.toString()}`);
+  };
+
+  const [tempSortBy, newSortDirection] = currentSortBy.split('-')
+  const getNewSortBy = () => {
+    switch (tempSortBy){
+      case 'userId': {
+        return 'id'
+      };
+      case 'profileLink': {
+        return 'userName'
+      };
+      case 'dateAdded': {
+        return 'createdAt'
+      };
+      default: {
+        return ''
+      }
+    }
+  }
+
   const clearQuery = () => {
     const pageSizeValue = query.pageSize;
     const newQuery = new URLSearchParams(searchParams);
@@ -95,14 +127,18 @@ export const useQueryParams = () => {
   return {
     clearQuery,
     currentSortBy,
+    newSortDirection,
+    newSortBy: getNewSortBy(),
     pageNumber,
     currentPageSearchParam,
     debouncedSearchValue,
     pageSize,
     searchTerm,
+    banFilter, // Возвращаем бан-фильтр
     setCurrentPageQuery,
     setPageSizeQuery,
     setSearchQuery,
-    setSortByQuery
+    setSortByQuery,
+    setBanFilterQuery // Добавляем функцию для изменения бан-фильтра
   };
 };
