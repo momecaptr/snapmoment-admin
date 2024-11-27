@@ -3,7 +3,7 @@ import {ChangeEvent, ReactElement, useEffect, useState} from "react";
 import {Button, Input, Typography} from "@momecap/ui-kit-snapmoment";
 import {GetUsersListTableQuery, useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData.generated";
 import {SortDirection, User, UserBlockStatus} from "@/graphql/types";
-import {UniversalTable} from "@/shared/ui";
+import {Loading, UniversalTable} from "@/shared/ui";
 import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import s from './UsersListTable.module.scss'
@@ -22,27 +22,15 @@ type Props = {
 }
 
 export const UsersListTable = (props: Props) => {
-  const router = useRouter()
   const [pickedId, setPickedId] = useState<number | undefined>()
   const { data, loading, error, globalStyle } = props
   const {setSortByQuery} = useQueryParams()
   const { isOpen: isDeleteUserModalOpen, setOpen: setIsDeleteUserModalOpen } = useModal(ModalKey.DeleteUser);
 
-  // Remove User
-  const [removeUser, { loading: isRemoveLoading, error: isRemoveError }] = useRemoveUserMutation()
-
-  const removeUserHandler = async (id: number) => {
-    await removeUser({
-      variables: {
-        userId: id
-      },
-      refetchQueries: ['GetUsersListTable']
-    })
-  }
-
   const actionTrigger = (id: number, actionName: string) => {
     console.log({id, actionName})
     setPickedId(id)
+    console.log({pickedId})
     if(actionName === 'delete') {
       setIsDeleteUserModalOpen(true)
     }
@@ -101,17 +89,13 @@ export const UsersListTable = (props: Props) => {
     }
   }
 
-  if(loading || isRemoveLoading){
-    return <div>Loading...</div>
-  }
-
-  if(isRemoveError){
-    router.push('/404')
+  if(loading){
+    return <Loading/>
   }
 
   return (
     <div className={globalStyle}>
-      <DeleteUserModal deleteUser={removeUserHandler} isOpen={isDeleteUserModalOpen} setOpen={setIsDeleteUserModalOpen} userId={8675} />
+      <DeleteUserModal isOpen={isDeleteUserModalOpen} setOpen={setIsDeleteUserModalOpen} userId={pickedId} />
       {error && <p>{error.message}</p>}
       <UniversalTable<TransformedDataSingleObj> disableHoverHeaderStyle={s.disableHoverHeaderStyle} data={transformedData} handleSortClick={handleSortClick} />
     </div>

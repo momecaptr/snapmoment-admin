@@ -1,40 +1,66 @@
 "use client"
 import s from './DeleteUserModal.module.scss';
 import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
-import {clsx} from "clsx";
+import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
+import {Loading} from "@/shared/ui";
+import {useCustomToast} from "@/shared/lib";
 
 type Props = {
-  deleteUser: (id: number) => void;
-  userId: any;
+  userId: number|undefined;
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
 };
 export const DeleteUserModal = (props: Props) => {
-  const { deleteUser, userId, isOpen, setOpen } = props;
+  const { userId, isOpen, setOpen } = props;
+  const {showToast} = useCustomToast()
 
-  const yesHandler = () => {
+  // Remove User
+  const [removeUser, { loading: isRemoveLoading, error: errorWhileRemove }] = useRemoveUserMutation()
+
+  const removeUserHandler = async () => {
+    await removeUser({
+      variables: {
+        userId: userId ?? 0
+      },
+      refetchQueries: ['GetUsersListTable']
+    })
+  }
+
+  const yesHandler = async() => {
     // deleteUser();
-    setOpen(false);
+    try {
+      await removeUserHandler();
+      showToast({message: 'User deleted', type: 'success' })
+      setOpen(false);
+    } catch(e) {
+      showToast({message: `Something bad happened, ${e}, ${errorWhileRemove}}. Try again later`, type: 'error' })
+    }
   };
   const noHandler = () => {
     setOpen(false);
   };
 
   return (
-    <Modal className={clsx(s.card)} onOpenChange={() => setOpen(false)} open={isOpen} title={'Delete Post'}>
-      <div className={s.text}>
-        <Typography variant={'regular_text_16'}>Are you sure you want to delete this post?</Typography>
-      </div>
-      <div className={s.buttonsWrapper}>
-        <Button onClick={yesHandler} variant={'outlined'}>
-          <Typography className={s.yes} variant={'h3'}>
-            Yes
-          </Typography>
-        </Button>
-        <Button onClick={noHandler}>
-          <Typography variant={'h3'}>No</Typography>
-        </Button>
-      </div>
+    <Modal className={s.card} onOpenChange={() => setOpen(false)} open={isOpen} title={'Delete Post'}>
+      {isRemoveLoading ? <Loading/> :
+        (
+          <>
+            <div className={s.text}>
+              <Typography variant={'regular_text_16'}>Are you sure you want to delete this post?</Typography>
+            </div>
+            <div className={s.buttonsWrapper}>
+              <Button onClick={yesHandler} variant={'outlined'}>
+                <Typography className={s.yes} variant={'h3'}>
+                  Yes
+                </Typography>
+              </Button>
+              <Button onClick={noHandler}>
+                <Typography variant={'h3'}>No</Typography>
+              </Button>
+            </div>
+          </>
+        )
+      }
     </Modal>
   );
 };
