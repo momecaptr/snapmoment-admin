@@ -9,18 +9,20 @@ import {clsx} from "clsx";
 import s from './UsersListTableDropDownButton.module.scss'
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import {MouseEvent} from "react";
+import {User} from "@/graphql/types";
+import {ActionTrigger} from "@/entities/usersListTable/UsersListTable";
 
 type Props = {
-  userId: number,
-  actionTrigger: (id: number, actionName: string) => void
+  userData: Omit<User, 'email' | 'profile'>,
+  actionTrigger: ({id, actionName, userName}: ActionTrigger) => void
 }
 
 export const UsersListTableDropDownButton = (props: Props) => {
-  const { userId, actionTrigger }  = props
+  const { userData, actionTrigger }  = props
 
   const commonHandler = (e: MouseEvent<HTMLButtonElement>) => {
     const actionName = e.currentTarget.dataset.actionName
-    actionTrigger(userId, actionName || '')
+    actionTrigger({id: userData.id, actionName: actionName || '', userName: userData.userName})
   }
   return (
     <>

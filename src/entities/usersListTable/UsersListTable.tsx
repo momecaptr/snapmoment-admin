@@ -14,6 +14,12 @@ import {DeleteUserModal} from "@/widget/modals/deleteUserModal/DeleteUserModal";
 import {ModalKey, useModal} from "@/shared/lib/hooks/useModal";
 import {useRouter} from "next/navigation";
 
+export type ActionTrigger = {
+  id: number,
+  actionName: string,
+  userName: string
+}
+
 type Props = {
   data: GetUsersListTableQuery | undefined,
   loading: boolean,
@@ -22,28 +28,27 @@ type Props = {
 }
 
 export const UsersListTable = (props: Props) => {
-  const [pickedId, setPickedId] = useState<number | undefined>()
   const { data, loading, error, globalStyle } = props
+  const router = useRouter()
+  const [pickedId, setPickedId] = useState<number | undefined>()
   const {setSortByQuery} = useQueryParams()
   const { isOpen: isDeleteUserModalOpen, setOpen: setIsDeleteUserModalOpen } = useModal(ModalKey.DeleteUser);
 
-  const actionTrigger = (id: number, actionName: string) => {
+  const actionTrigger = ({id, actionName, userName} : ActionTrigger) => {
     console.log({id, actionName})
     setPickedId(id)
     console.log({pickedId})
     if(actionName === 'delete') {
       setIsDeleteUserModalOpen(true)
     }
+    if(actionName === 'more'){
+      const url = `/profile/${id}/${userName}`
+      // window.open(url, '_blank')
+      router.push(url)
+    }
   }
 
-  type TransformedDataSingleObj = {
-    userId: ReactElement,
-    username: string,
-    profileLink: string | null | undefined,
-    dateAdded: string;
-    lastColumnWithButtons: ReactElement
-  }
-
+  // Transformation data for table
   const formatDate = (value: any) => new Date(value).toLocaleDateString('ru-RU');
 
   const conditionalName = ({firstName, lastName} : { firstName: string | null | undefined, lastName: string | null | undefined }) => {
@@ -57,6 +62,14 @@ export const UsersListTable = (props: Props) => {
       value = 'N/A'
     }
     return value
+  }
+
+  type TransformedDataSingleObj = {
+    userId: ReactElement,
+    username: string,
+    profileLink: string | null | undefined,
+    dateAdded: string;
+    lastColumnWithButtons: ReactElement
   }
 
   const transformedData: TransformedDataSingleObj[] = data
@@ -78,7 +91,7 @@ export const UsersListTable = (props: Props) => {
         }),
         profileLink: item.profile.userName,
         dateAdded: formatDate(item.createdAt),
-        lastColumnWithButtons: <UsersListTableDropDownButton userId={item.id} actionTrigger={actionTrigger} />
+        lastColumnWithButtons: <UsersListTableDropDownButton userData={item} actionTrigger={actionTrigger} />
       };
     })
     : [];
