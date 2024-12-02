@@ -1,6 +1,7 @@
 "use client"
 import {UserTabsNavigation} from "@/widget/userTabsNavigation/UserTabsNavigation";
 import {useState} from "react";
+import {UserUploadedPhotos} from "@/widget/userTabs/tabs/uploadedPhotos/UserUploadedPhotos";
 
 export const  userTabsVariants = {
   uploadedPhotos: 'Uploaded photos',
@@ -9,7 +10,7 @@ export const  userTabsVariants = {
   following: 'Following'
 }
 
-export const UserTabs = () => {
+export const UserTabs = ({userId} : {userId: number}) => {
   const [activeSection, setActiveSection] = useState(userTabsVariants.uploadedPhotos);
 
   const renderActiveSection = () => {
@@ -25,8 +26,8 @@ export const UserTabs = () => {
         return <h1>UserFollowing</h1>;
       case userTabsVariants.uploadedPhotos:
       default:
-        // return <UserUploadedPhotos />;
-        return <h1>UserUploadedPhotos</h1>;
+        return <UserUploadedPhotos userId={userId}/>;
+        // return <h1>UserUploadedPhotos</h1>;
     }
   };
   return (

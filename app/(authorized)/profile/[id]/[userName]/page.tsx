@@ -12,7 +12,7 @@ export default function Page (props: Props) {
       <h1>Ну это здравствуйте, конечно</h1>
       <h1>{params.id}</h1>
       <h1>{params.userName}</h1>
-      <UserTabs />
+      <UserTabs userId={+params.id}/>
     </>
   )
 }

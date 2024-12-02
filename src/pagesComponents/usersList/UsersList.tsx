@@ -45,6 +45,8 @@ export const UsersList = () => {
     skip: !accessKey
   })
 
+  console.log({usersListData: data})
+
   useEffect(() => {
     if (data) {
       const maxNumberOfPages = Math.ceil((data?.getUsers.pagination.totalCount ?? 0) / pageSize)
