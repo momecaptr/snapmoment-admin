@@ -2,7 +2,7 @@
 import s from './UserUploadedPhotos.module.scss'
 import {useGetPostsByUserQuery} from "@/graphql/queries/getPostsByUser.generated";
 import Image from "next/image";
-import {useGetPostsQuery} from "@/graphql/queries/getPosts.generated";
+import {useGetAllPostsQuery} from "@/graphql/queries/getAllPosts.generated";
 import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
 import {SortDirection} from "@/graphql/types";
 
@@ -17,7 +17,7 @@ export const UserUploadedPhotos = ({userId} : {userId: number}) => {
       base64UsernamePassword: accessKey
     },
   })
-  const {data: notThatData2} = useGetPostsQuery({
+  const {data: notThatData2} = useGetAllPostsQuery({
     variables: {
       endCursorPostId: 10,
       searchTerm,

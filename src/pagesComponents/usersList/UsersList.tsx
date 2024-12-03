@@ -30,8 +30,8 @@ export const UsersList = () => {
   const {data, loading, error} =  useGetAllUsersListTableQuery({
     variables: {
       searchTerm: debouncedSearchValue, // debouncedSearchValue
-      pageSize: +pageSize, // Было itemsPerPage
-      pageNumber: +pageNumber, // Было currentPage
+      pageSize: +pageSize, // Было itemsPerPage - количество эл-ов на странице
+      pageNumber: +pageNumber, // Было currentPage - текущая страница
       statusFilter: banFilter as UserBlockStatus,
       sortBy: newSortBy, // currentOrderBy тут и sortBy и direction
       sortDirection: newSortDirection as SortDirection.Desc | SortDirection.Asc,
