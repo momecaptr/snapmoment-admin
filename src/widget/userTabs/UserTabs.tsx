@@ -33,9 +33,7 @@ export const UserTabs = ({userId} : {userId: number}) => {
   return (
     <>
       <UserTabsNavigation setActiveSection={setActiveSection} activeSection={activeSection} />
-      <div style={{backgroundColor: 'slategray'}}>
-        {renderActiveSection()}
-      </div>
+      {renderActiveSection()}
     </>
   )
 }

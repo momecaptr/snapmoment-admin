@@ -9,7 +9,7 @@ import {SortDirection} from "@/graphql/types";
 export const UserUploadedPhotos = ({userId} : {userId: number}) => {
   const accessKey = localStorage.getItem('accessKey')
   const {searchTerm, newSortDirection, newSortBy} = useQueryParams()
-  const {data: notThatData} = useGetPostsByUserQuery({
+  const {data} = useGetPostsByUserQuery({
     variables: {
       userId,
     },
@@ -17,7 +17,7 @@ export const UserUploadedPhotos = ({userId} : {userId: number}) => {
       base64UsernamePassword: accessKey
     },
   })
-  const {data} = useGetPostsQuery({
+  const {data: notThatData2} = useGetPostsQuery({
     variables: {
       endCursorPostId: 10,
       searchTerm,
@@ -29,22 +29,21 @@ export const UserUploadedPhotos = ({userId} : {userId: number}) => {
       base64UsernamePassword: accessKey
     }
   })
-  console.log({posts: data?.getPosts.items, userId, usersPosts: notThatData?.getPostsByUser})
   return (
     <div className={s.layout}>
-      {notThatData?.getPostsByUser.items?.map(item => {
-        return (
-          <>
-            {item ? (
+      {
+        !data?.getPostsByUser.items ? (
+          <h1>No images</h1>
+        ) : (
+          data?.getPostsByUser.items?.map(item => {
+            return (
               <div className={s.item} key={item.id}>
-                <Image src={item.url as string} alt={item.url as string} height={250} width={250} />
+                <Image src={item.url as string} alt={item.url as string} height={250} width={250} key={item.id}/>
               </div>
-            ) : (
-              <h1>No images</h1>
-            )}
-          </>
+            )
+          })
         )
-      })}
+      }
     </div>
   );
 };
