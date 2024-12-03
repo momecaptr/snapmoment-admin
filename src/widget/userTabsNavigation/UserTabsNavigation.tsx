@@ -1,6 +1,7 @@
 import {Button} from "@momecap/ui-kit-snapmoment";
 import s from './UserTabsNavigation.module.scss'
 import {userTabsVariants} from "@/widget/userTabs/UserTabs";
+import {clsx} from "clsx";
 
 type Props = {
   activeSection: string
@@ -19,13 +20,13 @@ export const UserTabsNavigation = (props: Props) => {
         {userTabsVariantsArray.map((variant, index) => (
           <div className={s.section} key={index}>
             <Button
-              className={`${s.variant} ${activeSection === variant ? s.activeVariant : ''}`}
+              className={clsx(s.variant, activeSection === variant && s.activeVariant)}
               onClick={handleClick(variant)}
               variant={'text'}
             >
               {variant}
             </Button>
-            <span className={`${s.line} ${activeSection === variant ? s.activeLine : ''}`} />
+            <span className={clsx(s.line, activeSection === variant && s.activeLine)} />
           </div>
         ))}
     </div>

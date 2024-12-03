@@ -1,6 +1,6 @@
 import {gql} from '@apollo/client';
 
-export const GET_USERS_LIST_TABLE = gql`
+export const GET_ALL_USERS_LIST_TABLE = gql`
     query GetUsersListTable(
         $pageSize: Int
         $pageNumber: Int

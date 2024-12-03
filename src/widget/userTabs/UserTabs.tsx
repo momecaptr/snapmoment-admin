@@ -25,9 +25,9 @@ export const UserTabs = ({userId} : {userId: number}) => {
         // return <UserFollowing />;
         return <h1>UserFollowing</h1>;
       case userTabsVariants.uploadedPhotos:
+        return <UserUploadedPhotos userId={userId}/>;
       default:
         return <UserUploadedPhotos userId={userId}/>;
-        // return <h1>UserUploadedPhotos</h1>;
     }
   };
   return (

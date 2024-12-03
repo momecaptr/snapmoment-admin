@@ -1,7 +1,7 @@
 import {gql} from '@apollo/client';
 
-export const GET_POSTS = gql`
-    query GetPosts(
+export const GET_ALL_POSTS = gql`
+    query GetAllPosts(
         $endCursorPostId: Int
         $searchTerm: String
         $pageSize: Int

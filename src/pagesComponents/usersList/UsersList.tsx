@@ -4,12 +4,9 @@ import {Button, Input, SelectUI} from "@momecap/ui-kit-snapmoment";
 import {ChangeEvent, useEffect, useState} from "react";
 import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
 import {PaginationWithSelect} from "@/shared/ui";
-import {useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData.generated";
+import {useGetAllUsersListTableQuery} from "@/graphql/queries/getAllUsersListTableData.generated";
 import {SortDirection, UserBlockStatus} from "@/graphql/types";
 import s from './UsersList.module.scss'
-import {DeleteUserModal} from "@/widget/modals/deleteUserModal/DeleteUserModal";
-import {ModalKey, useModal} from "@/shared/lib/hooks/useModal";
-import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
 
 export const selectOptionsBan = [
   {text: 'Not selected', value: 'ALL'},
@@ -30,7 +27,7 @@ export const UsersList = () => {
   const accessKey = localStorage.getItem('accessKey')
   const {newSortBy, banFilter, setBanFilterQuery, newSortDirection, pageSize, pageNumber, debouncedSearchValue, setSortByQuery, setSearchQuery, searchTerm, setPageSizeQuery, setCurrentPageQuery} = useQueryParams()
 
-  const {data, loading, error} =  useGetUsersListTableQuery({
+  const {data, loading, error} =  useGetAllUsersListTableQuery({
     variables: {
       searchTerm: debouncedSearchValue, // debouncedSearchValue
       pageSize: +pageSize, // Было itemsPerPage

@@ -1,7 +1,7 @@
 "use client"
 import {ChangeEvent, ReactElement, useEffect, useState} from "react";
 import {Button, Input, Typography} from "@momecap/ui-kit-snapmoment";
-import {GetUsersListTableQuery, useGetUsersListTableQuery} from "@/graphql/queries/getUsersListTableData.generated";
+import {GetAllUsersListTableQuery} from "@/graphql/queries/getAllUsersListTableData.generated";
 import {SortDirection, User, UserBlockStatus} from "@/graphql/types";
 import {Loading, UniversalTable} from "@/shared/ui";
 import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
@@ -21,7 +21,7 @@ export type ActionTrigger = {
 }
 
 type Props = {
-  data: GetUsersListTableQuery | undefined,
+  data: GetAllUsersListTableQuery | undefined,
   loading: boolean,
   error: ApolloError | undefined
   globalStyle?: string

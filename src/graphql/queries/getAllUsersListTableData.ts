@@ -1,7 +1,7 @@
 import {gql} from '@apollo/client';
 
-export const GET_USERS = gql`
-    query GetUsers(
+export const GET_ALL_USERS_LIST_TABLE = gql`
+    query GetAllUsersListTable(
         $pageSize: Int
         $pageNumber: Int
         $sortBy: String
@@ -24,26 +24,12 @@ export const GET_USERS = gql`
                     reason
                     createdAt
                 }
-                createdAt
-                email
                 profile {
-                    id
                     userName
                     firstName
                     lastName
-                    city
-                    country
-                    region
-                    dateOfBirth
-                    aboutMe
-                    createdAt
-                    avatars {
-                        url
-                        width
-                        height
-                        fileSize
-                    }
                 }
+                createdAt
             }
             pagination {
                 pagesCount
