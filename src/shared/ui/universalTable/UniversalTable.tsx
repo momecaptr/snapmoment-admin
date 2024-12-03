@@ -3,7 +3,7 @@ import React, {ReactNode, useMemo} from 'react';
 import { clsx } from 'clsx';
 
 import s from './UniversalTable.module.scss';
-import {TableParts, Typography} from "@momecap/ui-kit-snapmoment";
+import {ArrowIosDownOutline, TableParts, Typography} from "@momecap/ui-kit-snapmoment";
 import {EmptyTable} from "@/shared/ui/universalTable/ui/EmptyTable";
 import {Loading} from "@/shared/ui";
 
@@ -15,7 +15,8 @@ interface UniversalTableProps<T> {
   emptyTableMessage?: string;
   isLoading?: boolean;
   disableHoverHeaderStyle: string;
-  handleSortClick: (title: string) => void
+  handleSortClick: (title: string) => void;
+  currentSortBy?: string
 }
 
 // Функция для создания заголовка колонки таблицы на основе типа данных. Добавление пробелов перед заглавными буквами,
@@ -36,7 +37,7 @@ const getHeader = (value: string) => {
 export const UniversalTable = <T extends object>(
   props: UniversalTableProps<T>
 ) => {
-  const { colsStyles, data, customRows, tHeadStyles, emptyTableMessage = 'No data', isLoading, handleSortClick, disableHoverHeaderStyle } = props;
+  const { colsStyles, data, customRows, tHeadStyles, emptyTableMessage = 'No data', currentSortBy, isLoading, handleSortClick, disableHoverHeaderStyle } = props;
 
   // Создаем заголовки и колонки на основе ключей первого элемента данных
   // Заголовки колонок
@@ -56,7 +57,7 @@ export const UniversalTable = <T extends object>(
   }, [data]);
 
   const handleIsBlockHead = (title: string) => {
-    return title.toLowerCase() === 'username' || title.length === 0
+    return title.toLowerCase() === 'username' || title.length === 0 // Мы тут проверяем на соответствие username или пустой строке -- по этим двум названиям столбцов сортирвку делать не надо
   }
 
   const headClickHandler = (title: string) => () => {
@@ -72,7 +73,16 @@ export const UniversalTable = <T extends object>(
           <TableParts.Row>
             {headers.map((header) => (
               <TableParts.HeadCell className={clsx(colsStyles, handleIsBlockHead(header) && disableHoverHeaderStyle)} key={header} onClick={headClickHandler(header)} >
-                <Typography variant={'medium_text_14'}>{getHeader(header as string)}</Typography>
+                <div className={s.cellWrapper}>
+                  <Typography as={'button'} variant={'medium_text_14'}>
+                    {getHeader(header as string)}
+                  </Typography>
+                  {(currentSortBy === `${header}-asc` || currentSortBy === `${header}-desc`) && (
+                    <ArrowIosDownOutline
+                      className={`${s.arrow} ${currentSortBy.includes('asc') ? s.rotate : ''}`}
+                    />
+                  )}
+                </div>
               </TableParts.HeadCell>
             ))}
           </TableParts.Row>

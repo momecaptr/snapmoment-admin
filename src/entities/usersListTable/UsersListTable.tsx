@@ -31,7 +31,7 @@ export const UsersListTable = (props: Props) => {
   const { data, loading, error, globalStyle } = props
   const router = useRouter()
   const [pickedId, setPickedId] = useState<number | undefined>()
-  const {setSortByQuery} = useQueryParams()
+  const {setSortByQuery, currentSortBy} = useQueryParams()
   const { isOpen: isDeleteUserModalOpen, setOpen: setIsDeleteUserModalOpen } = useModal(ModalKey.DeleteUser);
 
   const actionTrigger = ({id, actionName, userName} : ActionTrigger) => {
@@ -110,7 +110,13 @@ export const UsersListTable = (props: Props) => {
     <div className={globalStyle}>
       <DeleteUserModal isOpen={isDeleteUserModalOpen} setOpen={setIsDeleteUserModalOpen} userId={pickedId} />
       {error && <p>{error.message}</p>}
-      <UniversalTable<TransformedDataSingleObj> disableHoverHeaderStyle={s.disableHoverHeaderStyle} data={transformedData} handleSortClick={handleSortClick} />
+      <UniversalTable<TransformedDataSingleObj>
+        disableHoverHeaderStyle={s.disableHoverHeaderStyle}
+        data={transformedData}
+        handleSortClick={handleSortClick}
+        currentSortBy={currentSortBy}
+        colsStyles={s.columnsWidth}
+      />
     </div>
   );
 };
