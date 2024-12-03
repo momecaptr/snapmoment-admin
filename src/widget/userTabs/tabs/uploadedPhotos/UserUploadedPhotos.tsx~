@@ -1,8 +1,8 @@
 "use client"
 import s from './UserUploadedPhotos.module.scss'
-import {useGetPostsByUserQuery} from "@/graphql/queries/posts/getPostsByUser.generated";
+import {useGetPostsByUserQuery} from "@/graphql/queries/getPostsByUser.generated";
 import Image from "next/image";
-import {useGetAllPostsQuery} from "@/graphql/queries/posts/getAllPosts.generated";
+import {useGetAllPostsQuery} from "@/graphql/queries/getAllPosts.generated";
 import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
 import {SortDirection} from "@/graphql/types";
 

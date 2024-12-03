@@ -4,7 +4,7 @@ import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
 import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
 import {Loading} from "@/shared/ui";
 import {useCustomToast} from "@/shared/lib";
-import {GET_USERS} from "@/graphql/queries/getAllUsersData";
+import {GET_USERS} from "@/graphql/queries/userData/getAllUsersData";
 import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
 
 type Props = {

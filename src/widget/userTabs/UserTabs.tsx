@@ -3,7 +3,7 @@ import {UserTabsNavigation} from "@/widget/userTabsNavigation/UserTabsNavigation
 import {useState} from "react";
 import {UserUploadedPhotos} from "@/widget/userTabs/tabs/uploadedPhotos/UserUploadedPhotos";
 import {UserPayments} from "@/entities/userPayments/UserPayments";
-import {useGetOneUserQuery} from "@/graphql/queries/getOneUserData.generated";
+import {useGetOneUserQuery} from "@/graphql/queries/userData/getOneUserData.generated";
 import Image from "next/image";
 
 export const  userTabsVariants = {
