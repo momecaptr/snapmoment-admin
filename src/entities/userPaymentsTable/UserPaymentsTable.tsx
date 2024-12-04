@@ -1,7 +1,6 @@
 "use client"
 import s from './UserPaymentsTable.module.scss'
 import {
-  combineFirstLastName,
   formatDate,
   selectOptionsForPagination,
   useCustomToast,
@@ -10,10 +9,7 @@ import {
 import {SortDirection} from "@/graphql/types";
 import {useGetAllPaymentsQuery} from "@/graphql/queries/payments/getAllPayments.generated";
 import {useGetPaymentsByUserQuery} from "@/graphql/queries/payments/getPaymentsByUser.generated";
-import {ReactElement, useEffect} from "react";
-import {CircleBackslashIcon} from "@radix-ui/react-icons";
-import {Typography} from "@momecap/ui-kit-snapmoment";
-import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
+import {useEffect} from "react";
 import {Loading, PaginationWithSelect, UniversalTable} from "@/shared/ui";
 import {formatSubscriptionType} from "@/shared/lib/helpers/transformData";
 
