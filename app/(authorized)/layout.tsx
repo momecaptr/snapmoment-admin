@@ -4,6 +4,7 @@ import client from "../../apollo-client";
 import {Toaster} from "sonner";
 import {SideBar} from "@/widget";
 import s from './layout.module.scss'
+import {Suspense} from "react";
 
 export default function NotAuthLayout({
  children,
@@ -12,16 +13,18 @@ export default function NotAuthLayout({
 }>) {
   return (
     <ApolloProvider client={client}>
-      <div className={s.layout}>
-        {/*<body className={`${geistSans.variable} ${geistMono.variable}`}>*/}
-        <div className={s.sidebar}>
-          <SideBar/>
+      <Suspense>
+        <div className={s.layout}>
+          {/*<body className={`${geistSans.variable} ${geistMono.variable}`}>*/}
+          <div className={s.sidebar}>
+            <SideBar/>
+          </div>
+          <div className={s.content}>
+            {children}
+          </div>
+          <Toaster position={'bottom-left'}/>
         </div>
-        <div className={s.content}>
-          {children}
-        </div>
-        <Toaster position={'bottom-left'}/>
-      </div>
+      </Suspense>
     </ApolloProvider>
   );
 }

@@ -1,15 +1,23 @@
 "use client"
 import { UsersListTable} from "@/entities";
 import {Button, Input, SelectUI} from "@momecap/ui-kit-snapmoment";
-import {ChangeEvent, useEffect, useState} from "react";
+import {ChangeEvent, Suspense, useEffect, useState} from "react";
 import {useQueryParams, initialCurrentPage, selectOptionsForBan, selectOptionsForPagination} from "@/shared/lib";
-import {PaginationWithSelect} from "@/shared/ui";
+import {Loading, PaginationWithSelect} from "@/shared/ui";
 import {useGetAllUsersListTableQuery} from "@/graphql/queries/getAllUsersListTableData.generated";
 import {SortDirection, UserBlockStatus} from "@/graphql/types";
 import s from './UsersList.module.scss'
 
 export const UsersList = () => {
-  const accessKey = localStorage.getItem('accessKey')
+  // const accessKey = localStorage.getItem('accessKey')
+  const [accessKey, setAccessKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const key = localStorage.getItem('accessKey');
+      setAccessKey(key);
+    }
+  }, []);
   const {newSortBy, banFilter, setBanFilterQuery, newSortDirection, pageSize, pageNumber, debouncedSearchValue, setSortByQuery, setSearchQuery, searchTerm, setPageSizeQuery, setCurrentPageQuery} = useQueryParams()
 
   const {data, loading, error} =  useGetAllUsersListTableQuery({
