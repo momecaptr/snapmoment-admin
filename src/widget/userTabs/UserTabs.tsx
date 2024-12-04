@@ -5,17 +5,10 @@ import {UserUploadedPhotos} from "./tabs/uploadedPhotos/UserUploadedPhotos";
 import {UserPayments} from "@/entities/userPayments/UserPayments";
 import {useGetOneUserQuery} from "@/graphql/queries/userData/getOneUserData.generated";
 import Image from "next/image";
-import {formatDate, MAIN_DOMAIN} from "@/shared/lib";
+import {formatDate, MAIN_DOMAIN, userTabsVariants} from "@/shared/lib";
 import {BackBtn} from "@/shared/ui";
 import {Typography} from "@momecap/ui-kit-snapmoment";
 import s from './UserTabs.module.scss'
-
-export const  userTabsVariants = {
-  uploadedPhotos: 'Uploaded photos',
-  payments: 'Payments',
-  followers: 'Followers',
-  following: 'Following'
-}
 
 export const UserTabs = ({userId} : {userId: number}) => {
   const [activeSection, setActiveSection] = useState(userTabsVariants.uploadedPhotos);

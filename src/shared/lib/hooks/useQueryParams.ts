@@ -1,7 +1,7 @@
 "use client"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {useDebounce} from "./useDebounce";
-import {initCurrentPage, selectOptionPagination, selectOptionsBan} from "@/pagesComponents/usersList/UsersList";
+import {initialCurrentPage, selectOptionsForBan, selectOptionsForPagination} from "@/shared/lib";
 
 export const useQueryParams = () => {
   const router = useRouter();
@@ -14,14 +14,14 @@ export const useQueryParams = () => {
 
   const query = Object.fromEntries(searchParams.entries());
 
-  const pageSize = query.pageSize ? Number(query.pageSize) : Number(selectOptionPagination[0].value);
-  const pageNumber = query.pageNumber ? Number(query.pageNumber) : Number(initCurrentPage);
+  const pageSize = query.pageSize ? Number(query.pageSize) : Number(selectOptionsForPagination[0].value);
+  const pageNumber = query.pageNumber ? Number(query.pageNumber) : Number(initialCurrentPage);
   const currentPageSearchParam = query.pageNumber;
   const searchTerm = query.searchTerm ?? '';
   const currentSortBy = query.sortBy ?? '';
 
   // Получение значения бан-фильтра из параметров URL, или по умолчанию - 'ALL'
-  const banFilter = query.banFilter ? query.banFilter : selectOptionsBan[0].value;
+  const banFilter = query.banFilter ? query.banFilter : selectOptionsForBan[0].value;
 
   const debouncedSearchValue = useDebounce(searchTerm);
 
@@ -39,7 +39,7 @@ export const useQueryParams = () => {
   const setCurrentPageQuery = (currentPageQuery: number) => {
     const newQuery = new URLSearchParams(searchParams);
 
-    if (currentPageQuery === Number(initCurrentPage)) {
+    if (currentPageQuery === Number(initialCurrentPage)) {
       newQuery.delete('pageNumber');
     } else {
       newQuery.set('pageNumber', currentPageQuery.toString());
@@ -50,7 +50,7 @@ export const useQueryParams = () => {
   const setPageSizeQuery = (pageSizeQuery: number) => {
     const newQuery = new URLSearchParams(searchParams);
 
-    if (pageSizeQuery === Number(selectOptionPagination[0].value)) {
+    if (pageSizeQuery === Number(selectOptionsForPagination[0].value)) {
       newQuery.delete('pageSize');
     } else {
       newQuery.set('pageSize', pageSizeQuery.toString());
@@ -86,7 +86,7 @@ export const useQueryParams = () => {
   const setBanFilterQuery = (banFilterQuery: string) => {
     const newQuery = new URLSearchParams(searchParams);
 
-    if (banFilterQuery === selectOptionsBan[0].value) {
+    if (banFilterQuery === selectOptionsForBan[0].value) {
       newQuery.delete('banFilter');
     } else {
       newQuery.set('banFilter', banFilterQuery);

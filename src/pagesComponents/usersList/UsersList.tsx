@@ -7,21 +7,7 @@ import {PaginationWithSelect} from "@/shared/ui";
 import {useGetAllUsersListTableQuery} from "@/graphql/queries/getAllUsersListTableData.generated";
 import {SortDirection, UserBlockStatus} from "@/graphql/types";
 import s from './UsersList.module.scss'
-
-export const selectOptionsBan = [
-  {text: 'Not selected', value: 'ALL'},
-  { text: 'Blocked', value: 'BLOCKED' },
-  { text: 'Not blocked', value: 'UNBLOCKED' },
-]
-
-export const selectOptionPagination = [
-  { text: '8', value: '8' },
-  { text: '15', value: '15' },
-  { text: '30', value: '30' },
-  { text: '50', value: '50' },
-]
-export const initCurrentPage = '1'
-
+import {initialCurrentPage, selectOptionsForBan, selectOptionsForPagination} from "@/shared/lib";
 
 export const UsersList = () => {
   const accessKey = localStorage.getItem('accessKey')
@@ -52,19 +38,19 @@ export const UsersList = () => {
         setCurrentPageQuery(maxNumberOfPages)
       }
       if (data?.getUsers.users.length === 0) {
-        setCurrentPageQuery(Number(initCurrentPage))
+        setCurrentPageQuery(Number(initialCurrentPage))
       }
     }
   }, [data, pageSize, pageNumber])
 
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCurrentPageQuery(Number(initCurrentPage))
+    setCurrentPageQuery(Number(initialCurrentPage))
     setSearchQuery(e.currentTarget.value)
   }
 
   const handleBanFilter = (items: string) => {
-    setCurrentPageQuery(Number(initCurrentPage))
+    setCurrentPageQuery(Number(initialCurrentPage))
     setBanFilterQuery(items)
   }
 
@@ -73,14 +59,14 @@ export const UsersList = () => {
       <div className={s.usersListHeader}>
         <Input callback={setSearchQuery} onChange={handleSearchChange} type={'search'} currentValue={searchTerm} className={s.input} />
         <div className={s.select}>
-          <SelectUI selectOptions={selectOptionsBan} value={banFilter} onValueChange={handleBanFilter} />
+          <SelectUI selectOptions={selectOptionsForBan} value={banFilter} onValueChange={handleBanFilter} />
         </div>
       </div>
       <UsersListTable data={data} loading={loading} error={error} globalStyle={s.tableGlobal}/>
       {!loading && <PaginationWithSelect
         pageNumber={pageNumber}
         pageSize={pageSize}
-        selectOptions={selectOptionPagination}
+        selectOptions={selectOptionsForPagination}
         setPageNumber={setCurrentPageQuery}
         setPageSize={setPageSizeQuery}
         totalItems={data?.getUsers.pagination.totalCount ?? 1}

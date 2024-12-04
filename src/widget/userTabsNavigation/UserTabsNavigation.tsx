@@ -1,13 +1,12 @@
 import {Button} from "@momecap/ui-kit-snapmoment";
 import s from './UserTabsNavigation.module.scss'
-import {userTabsVariants} from "@/widget/userTabs/UserTabs";
 import {clsx} from "clsx";
+import {userTabsVariants} from "@/shared/lib";
 
 type Props = {
   activeSection: string
   setActiveSection: (section: string) => void
 }
-
 
 export const UserTabsNavigation = (props: Props) => {
   const {setActiveSection, activeSection} = props
