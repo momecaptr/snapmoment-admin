@@ -1,16 +1,8 @@
-import type { Metadata } from "next";
-import "@/src/myApp/styles/index.scss";
-
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
+import '@momecap/ui-kit-snapmoment/dist/style.css'
+import {Metadata} from "next";
+import {Header} from "@/widget";
+import "../src/myApp/styles/index.scss";
+import { Providers } from '../src/providers/Providers'; // Клиентский компонент с провайдерами
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,8 +17,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       {/*<body className={`${geistSans.variable} ${geistMono.variable}`}>*/}
+      <head>
+        <link rel="icon" data-rh={'true'} href="./favicon.ico"/>
+      </head>
       <body>
-        {children}
+        {/* Оборачиваем всё приложение в клиентский компонент Providers */}
+        <Providers>
+          <Header/>
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );

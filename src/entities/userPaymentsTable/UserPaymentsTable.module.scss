@@ -1,0 +1,22 @@
+.columnsWidth {
+  &:nth-child(1) {
+    width: 20%;
+    position: relative;
+  };
+  &:nth-child(2) {
+    width: 25%;
+    position: relative;
+  }
+  &:nth-child(3) {
+    width: 15%;
+    position: relative;
+  }
+  &:nth-child(4) {
+    width: 20%;
+    position: relative;
+  }
+}
+
+.marginTableBtm {
+  margin-bottom: 36px;
+}

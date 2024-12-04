@@ -1,11 +1,7 @@
-// "use client";
-// import Image from "next/image";
-// import styles from "./page.module.css";
+import {SignIn} from "@/pagesComponents";
 
-export default function Home() {
+export default function Page() {
   return (
-    <h1>
-      Some text
-    </h1>
+    <SignIn/>
   );
 }

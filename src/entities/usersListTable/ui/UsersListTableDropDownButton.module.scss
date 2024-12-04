@@ -1,0 +1,46 @@
+.opener {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 5px;
+
+  &:hover {
+    outline: 3px solid var(--dark-300);
+    cursor: pointer;
+  }
+}
+
+.usersListDdWrapper {
+  padding: 5px;
+  background-color: var(--dark-500);
+  border-radius: 7px;
+}
+
+.usersListDdWrapperWrapperActiveTrigger {
+  background-color: var(--dark-300);
+  color: var(--accent-300)
+}
+
+.usersListDdItem {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+
+  .button {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-start;
+
+    width: 100%;
+    padding: 6px 12px;
+
+    &:hover {
+      border-radius: 4px;
+      outline: 3px solid var(--accent-300);
+    }
+  }
+}

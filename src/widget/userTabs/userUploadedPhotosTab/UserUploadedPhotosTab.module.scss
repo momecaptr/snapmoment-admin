@@ -1,0 +1,13 @@
+.layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Явная ширина столбцов */
+  grid-template-rows: 250px; /* Явная высота строк */
+  grid-gap: 20px;
+
+  .item {
+    justify-content: center; /* Горизонтальное выравнивание */
+    align-content: center; /* Вертикальное выравнивание */
+    height: 250px;
+    text-align: center;
+  }
+}
