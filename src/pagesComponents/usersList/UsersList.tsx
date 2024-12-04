@@ -1,5 +1,5 @@
 "use client"
-import { UsersListTable} from "@/entities/usersListTable/UsersListTable";
+import { UsersListTable} from "@/entities";
 import {Button, Input, SelectUI} from "@momecap/ui-kit-snapmoment";
 import {ChangeEvent, useEffect, useState} from "react";
 import {useQueryParams, initialCurrentPage, selectOptionsForBan, selectOptionsForPagination} from "@/shared/lib";

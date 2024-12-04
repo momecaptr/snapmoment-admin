@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {useState} from "react";
 import {userTabsVariants} from "@/shared/lib";
-import {UserPayments} from "@/entities/userPayments/UserPayments";
+import {UserPayments} from "@/entities";
 import {BackBtn} from "@/shared/ui";
 import {ProfileHead, UserUploadedPhotosTab, UserTabsNavigation} from "@/widget";
 
