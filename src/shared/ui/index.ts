@@ -5,3 +5,4 @@ export { CustomToast } from './customToast/CustomToast';
 export { FormCheckbox, FormTextfield, FormTextfieldArea } from './forms'
 export { UniversalTable } from './universalTable/UniversalTable'
 export { PaginationWithSelect } from './pagination/ui/PaginationWithSelect'
+export { BackBtn } from './backBtn/BackBtn'

@@ -5,14 +5,9 @@ type Props = {
 }
 
 export default function Page (props: Props) {
-  const {params} = props
+  const {params: {id: userId, userName}} = props
 
   return (
-    <>
-      <h1>Ну это здравствуйте, конечно</h1>
-      <h1>{params.id}</h1>
-      <h1>{params.userName}</h1>
-      <UserTabs userId={+params.id}/>
-    </>
+    <UserTabs userId={+userId}/>
   )
 }

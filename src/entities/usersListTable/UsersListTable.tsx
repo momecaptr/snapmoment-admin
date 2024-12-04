@@ -13,6 +13,7 @@ import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
 import {DeleteUserModal} from "@/widget/modals/deleteUserModal/DeleteUserModal";
 import {ModalKey, useModal} from "@/shared/lib/hooks/useModal";
 import {useRouter} from "next/navigation";
+import {combineFirstLastName, formatDate} from "@/shared/lib";
 
 export type ActionTrigger = {
   id: number,
@@ -48,22 +49,6 @@ export const UsersListTable = (props: Props) => {
     }
   }
 
-  // Transformation data for table
-  const formatDate = (value: any) => new Date(value).toLocaleDateString('ru-RU');
-
-  const conditionalName = ({firstName, lastName} : { firstName: string | null | undefined, lastName: string | null | undefined }) => {
-    let value
-    if(firstName && firstName.length > 0) {
-      value =firstName
-      if(lastName && lastName.length > 0) {
-        value = `${firstName} ${lastName}`
-      }
-    } else {
-      value = 'N/A'
-    }
-    return value
-  }
-
   type TransformedDataSingleObj = {
     userId: ReactElement,
     username: string,
@@ -85,7 +70,7 @@ export const UsersListTable = (props: Props) => {
             </Typography>
           </div>
         ),
-        username: conditionalName({
+        username: combineFirstLastName({
           firstName: item.profile.firstName,
           lastName: item.profile.lastName,
         }),

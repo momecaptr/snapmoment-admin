@@ -1,10 +1,14 @@
 "use client"
 import {UserTabsNavigation} from "@/widget/userTabsNavigation/UserTabsNavigation";
 import {useState} from "react";
-import {UserUploadedPhotos} from "@/widget/userTabs/tabs/uploadedPhotos/UserUploadedPhotos";
+import {UserUploadedPhotos} from "./tabs/uploadedPhotos/UserUploadedPhotos";
 import {UserPayments} from "@/entities/userPayments/UserPayments";
 import {useGetOneUserQuery} from "@/graphql/queries/userData/getOneUserData.generated";
 import Image from "next/image";
+import {formatDate, MAIN_DOMAIN} from "@/shared/lib";
+import {BackBtn} from "@/shared/ui";
+import {Typography} from "@momecap/ui-kit-snapmoment";
+import s from './UserTabs.module.scss'
 
 export const  userTabsVariants = {
   uploadedPhotos: 'Uploaded photos',
@@ -17,16 +21,18 @@ export const UserTabs = ({userId} : {userId: number}) => {
   const [activeSection, setActiveSection] = useState(userTabsVariants.uploadedPhotos);
   const accessKey = localStorage.getItem('accessKey')
 
-  const {data: userData} = useGetOneUserQuery({
+  const {data} = useGetOneUserQuery({
     variables: {
-      userId: userId
+      userId
     },
     context: {
       base64UsernamePassword: accessKey
     },
   })
 
-  console.log({aboutUserWholeShit: userData})
+  const userData = data?.getUser
+
+  console.log(userData)
 
   const renderActiveSection = () => {
     switch (activeSection) {
@@ -47,9 +53,38 @@ export const UserTabs = ({userId} : {userId: number}) => {
   };
   return (
     <>
-      <Image src={userData?.getUser?.profile?.avatars?.[0]?.url || ''} alt={'avatar'} width={100} height={100}/>
-      <Image src={userData?.getUser?.profile?.avatars?.[1]?.url || ''} alt={'avatar'} width={100} height={100}/>
-      <UserTabsNavigation setActiveSection={setActiveSection} activeSection={activeSection} />
+      <h1>Ну это здравствуйте, конечно</h1>
+      <BackBtn href={`/users-list`}>
+        Back to Users List
+      </BackBtn>
+      <div className={s.about}>
+        <div className={s.photoAndNameBlock}>
+          <Image src={userData?.profile?.avatars?.[0]?.url || ''} alt={'avatar'} width={100} height={100} className={s.avatar}/>
+          <div>
+            <Typography variant={'h1'}>{userData?.profile.firstName} {userData?.profile.lastName}</Typography>
+            <Typography
+              as={'a'}
+              href={`https://${MAIN_DOMAIN}/profile/${userId}`}
+              target={'_blank'}
+              rel="noopener noreferrer"
+            >
+              {userData?.userName}
+            </Typography>
+          </div>
+        </div>
+        <div className={s.userIdAndDateBlock}>
+          <div className={s.userIdBlock}>
+            <Typography className={s.grayTitle}>UserID</Typography>
+            <Typography>{userData?.id}</Typography>
+          </div>
+          <div>
+            <Typography className={s.grayTitle}>Profile Creation Date</Typography>
+            <Typography>{formatDate(userData?.createdAt)}</Typography>
+          </div>
+        </div>
+      </div>
+
+      <UserTabsNavigation setActiveSection={setActiveSection} activeSection={activeSection}/>
       {renderActiveSection()}
     </>
   )

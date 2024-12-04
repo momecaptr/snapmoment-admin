@@ -1,0 +1,1 @@
+export const MAIN_DOMAIN = 'snapmoment.org'

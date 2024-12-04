@@ -1,0 +1,35 @@
+.backBtn {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+
+  width: max-content;
+  padding: 0;
+
+  font-size: 14px;
+  text-decoration: none;
+
+  background-color: transparent;
+  box-shadow: none;
+
+  &:focus-visible {
+    color: var(--accent-500);
+    background-color: transparent;
+  }
+
+  &:hover {
+    color: var(--accent-500);
+    background-color: transparent;
+  }
+
+  &:active {
+    color: var(--accent-100);
+    background-color: transparent;
+  }
+
+  .backArrow {
+    width: 26px;
+    height: 26px;
+  }
+}
