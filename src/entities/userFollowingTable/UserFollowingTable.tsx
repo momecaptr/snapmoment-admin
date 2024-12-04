@@ -1,5 +1,5 @@
 "use client"
-import s from './UserFollowersTable.module.scss'
+import s from './UserFollowingTable.module.scss'
 import {
   formatDate, MAIN_DOMAIN,
   selectOptionsForPagination,
@@ -10,7 +10,7 @@ import {SortDirection} from "@/graphql/types";
 import {ReactElement, useEffect} from "react";
 import {Typography} from "@momecap/ui-kit-snapmoment";
 import {Loading, PaginationWithSelect, UniversalTable} from "@/shared/ui";
-import {useGetFollowersQuery} from "@/graphql/queries/followers/getFollowers.generated";
+import {useGetFollowingQuery} from "@/graphql/queries/following/getFollowing.generated";
 import * as React from "react";
 
 type Props = {
@@ -18,13 +18,13 @@ type Props = {
   globalStyle?: string
 }
 
-export const UserFollowersTable = (props: Props) => {
+export const UserFollowingTable = (props: Props) => {
   const {userId, globalStyle} = props
   const {showToast} = useCustomToast()
   const accessKey = localStorage.getItem('accessKey')
   const {newSortDirection, newSortBy, pageSize, pageNumber, setSortByQuery, setCurrentPageQuery, setPageSizeQuery, currentSortBy} = useQueryParams()
 
-  const {data: userFollowers, loading, error} = useGetFollowersQuery({
+  const {data: userFollowing, loading, error} = useGetFollowingQuery({
     variables: {
       userId,
       pageSize: +pageSize,
@@ -37,16 +37,15 @@ export const UserFollowersTable = (props: Props) => {
     }
   })
 
-  type TransformedFollowersDataSingleObj = {
+  type TransformedFollowingDataSingleObj = {
     userId: number,
     username: string | null | undefined,
     profileLink: ReactElement,
     subscriptionDate: string;
   }
 
-  const transformedData: TransformedFollowersDataSingleObj[] = userFollowers
-    // ? userFollowers?.getFollowers.items.map((item) => {
-    ? mockData.map((item) => {
+  const transformedData: TransformedFollowingDataSingleObj[] = userFollowing
+    ? userFollowing?.getFollowing.items.map((item) => {
       return {
         userId: item.id,
         username: item.userName,
@@ -65,7 +64,7 @@ export const UserFollowersTable = (props: Props) => {
     })
     : [];
 
-  console.log({userFollowers: userFollowers?.getFollowers})
+  console.log({userFollowing: userFollowing?.getFollowing})
 
   const handleSortClick = (title: string) => {
     if(title.toLowerCase() !== 'username' || title.length > 0) {
@@ -94,31 +93,15 @@ export const UserFollowersTable = (props: Props) => {
         colsStyles={s.columnsWidth}
         globalStyle={s.marginTableBtm}
       />
-      {/*{!loading && userFollowers && userFollowers.getFollowers.totalCount > 0 && <PaginationWithSelect*/}
-      {!loading && <PaginationWithSelect
+      {!loading && userFollowing && userFollowing.getFollowing.totalCount > 0 && <PaginationWithSelect
 				pageNumber={pageNumber}
 				pageSize={pageSize}
 				selectOptions={selectOptionsForPagination}
 				setPageNumber={setCurrentPageQuery}
 				setPageSize={setPageSizeQuery}
-				// totalItems={userFollowers?.getFollowers.totalCount ?? 1}
-				totalItems={mockData.length}
+        totalItems={userFollowing?.getFollowing.totalCount ?? 1}
 				alignment={'left'}
 			/>}
     </>
   );
 };
-
-const mockData = [
-  {id: 1, userId: 1231, userName: 'Степа Коровин', createdAt: new Date()},
-  {id: 2, userId: 123134534, userName: 'Франц', createdAt: new Date()},
-  {id: 3, userId: 123541, userName: 'Rjjjkks', createdAt: new Date()},
-  {id: 4, userId: 12391, userName: 'dfgsfgdgs', createdAt: new Date()},
-  {id: 5, userId: 12831, userName: 'DFSIGHU', createdAt: new Date()},
-  {id: 6, userId: 12371, userName: 'sgef e', createdAt: new Date()},
-  {id: 7, userId: 123166, userName: 'Степа sg', createdAt: new Date()},
-  {id: 8, userId: 1234351, userName: 'dЖепа', createdAt: new Date()},
-  {id: 9, userId: 12317, userName: ' Жепа', createdAt: new Date()},
-  {id: 10, userId: 1236, userName: 'GJfsg', createdAt: new Date()},
-  {id: 111, userId: 1235, userName: 'Степа', createdAt: new Date()},
-]

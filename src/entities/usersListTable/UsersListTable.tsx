@@ -7,10 +7,11 @@ import {Loading, UniversalTable} from "@/shared/ui";
 import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import s from './UsersListTable.module.scss'
-import {useQueryParams, useModal, ModalKey, combineFirstLastName, formatDate} from "@/shared/lib";
+import {useQueryParams, useModal, ModalKey, combineFirstLastName, formatDate, MAIN_DOMAIN} from "@/shared/lib";
 import {ApolloError} from "@apollo/client";
 import {DeleteUserModal} from "@/features/deleteUserModal/DeleteUserModal";
 import {useRouter} from "next/navigation";
+import * as React from "react";
 
 export type ActionTrigger = {
   id: number,
@@ -49,7 +50,8 @@ export const UsersListTable = (props: Props) => {
   type TransformedDataSingleObj = {
     userId: ReactElement,
     username: string,
-    profileLink: string | null | undefined,
+    // profileLink: string | null | undefined,
+    profileLink: ReactElement,
     dateAdded: string;
     lastColumnWithButtons: ReactElement
   }
@@ -71,7 +73,17 @@ export const UsersListTable = (props: Props) => {
           firstName: item.profile.firstName,
           lastName: item.profile.lastName,
         }),
-        profileLink: item.profile.userName,
+        profileLink: (
+          <Typography
+            as={'a'}
+            href={`https://${MAIN_DOMAIN}/profile/${item.id}`}
+            target={'_blank'}
+            rel="noopener noreferrer"
+          >
+            {item.profile.userName}
+          </Typography>
+        ),
+        // profileLink: item.profile.userName,
         dateAdded: formatDate(item.createdAt),
         lastColumnWithButtons: <UsersListTableDropDownButton userData={item} actionTrigger={actionTrigger} />
       };
