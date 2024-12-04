@@ -2,7 +2,7 @@
 import {ApolloProvider} from "@apollo/client";
 import client from "../../apollo-client";
 import {Toaster} from "sonner";
-import {SideBar} from "@/widget/sideBar/SideBar";
+import {SideBar} from "@/widget";
 import s from './layout.module.scss'
 
 export default function NotAuthLayout({

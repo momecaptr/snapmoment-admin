@@ -1,12 +1,12 @@
 "use client"
-import s from './UserUploadedPhotos.module.scss'
+import s from './UserUploadedPhotosTab.module.scss'
 import {useGetPostsByUserQuery} from "@/graphql/queries/posts/getPostsByUser.generated";
 import Image from "next/image";
 import {useGetAllPostsQuery} from "@/graphql/queries/posts/getAllPosts.generated";
-import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
+import {useQueryParams} from "@/shared/lib";
 import {SortDirection} from "@/graphql/types";
 
-export const UserUploadedPhotos = ({userId} : {userId: number}) => {
+export const UserUploadedPhotosTab = ({userId} : {userId: number}) => {
   const accessKey = localStorage.getItem('accessKey')
   const {searchTerm, newSortDirection, newSortBy} = useQueryParams()
   const {data} = useGetPostsByUserQuery({
@@ -29,6 +29,9 @@ export const UserUploadedPhotos = ({userId} : {userId: number}) => {
       base64UsernamePassword: accessKey
     }
   })
+
+  console.log(data?.getPostsByUser)
+
   return (
     <div className={s.layout}>
       {

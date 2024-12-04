@@ -1,4 +1,4 @@
-import { ModalKey } from '@/shared/lib/hooks/useModal';
+import { ModalKey } from '@/shared/lib';
 
 export interface AppSettings {
   isPhotoInState: boolean;

@@ -2,10 +2,8 @@
 import s from './DeleteUserModal.module.scss';
 import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
 import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
-import {Loading} from "@/shared/ui";
-import {useCustomToast} from "@/shared/lib";
-import {GET_USERS} from "@/graphql/queries/userData/getAllUsersData";
-import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
+import {useCustomToast, useQueryParams} from "@/shared/lib";
+import {GET_ALL_USERS} from "@/graphql/queries/userData/getAllUsersData";
 
 type Props = {
   userId: number|undefined;
@@ -21,7 +19,6 @@ export const DeleteUserModal = (props: Props) => {
   // Remove User
   const [removeUser, { loading: isRemoveLoading, error: errorWhileRemove }] = useRemoveUserMutation()
 
-
   const removeUserHandler = async () => {
     await removeUser({
       context: { base64UsernamePassword: localStorage.getItem('accessKey') },
@@ -30,7 +27,7 @@ export const DeleteUserModal = (props: Props) => {
       },
       refetchQueries: [{
         context: { base64UsernamePassword: localStorage.getItem('accessKey') },
-        query: GET_USERS,
+        query: GET_ALL_USERS,
         variables: {
           pageNumber: pageNumber,
           pageSize: pageSize,

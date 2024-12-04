@@ -1,6 +1,6 @@
 "use client"
 import s from './UserPayemnts.module.scss'
-import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
+import {useQueryParams} from "@/shared/lib";
 import {SortDirection} from "@/graphql/types";
 import {useGetAllPaymentsQuery} from "@/graphql/queries/payments/getAllPayments.generated";
 import {useGetPaymentsByUserQuery} from "@/graphql/queries/payments/getPaymentsByUser.generated";

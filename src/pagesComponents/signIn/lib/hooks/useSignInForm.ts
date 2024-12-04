@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { useCustomToast } from '@/shared/lib';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {useRouter} from "next/navigation";
 import {useLoginAdminMutation} from "@/graphql/queries/loginAdmin.generated";
-import {signInAdminSchema, SignInAdminSchemaType} from "@/shared/schemas/authSchema/authShema";
+import {signInAdminSchema, type SignInAdminSchemaType} from "@/shared/schemas";
 
 export const useSignInForm = () => {
   const {

@@ -1,6 +1,6 @@
 import '@momecap/ui-kit-snapmoment/dist/style.css'
 import {Metadata} from "next";
-import {Header} from "@/widget/header/Header";
+import {Header} from "@/widget";
 import "../src/myApp/styles/index.scss";
 import { Providers } from '../src/providers/Providers'; // Клиентский компонент с провайдерами
 

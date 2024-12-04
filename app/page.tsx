@@ -1,4 +1,4 @@
-import {SignIn} from "@/pagesComponents/signIn/ui/SignIn";
+import {SignIn} from "@/pagesComponents";
 
 export default function Page() {
   return (

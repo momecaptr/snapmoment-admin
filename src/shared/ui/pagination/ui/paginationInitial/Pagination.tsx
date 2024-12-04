@@ -1,5 +1,5 @@
 import { ArrowIosBack, ArrowIosForward} from '@momecap/ui-kit-snapmoment'
-import { usePagination } from '@/shared/ui/pagination/hooks/usePaginationLogic';
+import { usePagination } from '../../hooks/usePaginationLogic';
 
 import s from './Pagination.module.scss';
 

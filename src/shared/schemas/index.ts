@@ -1,14 +1,6 @@
 export {
-  createNewPasswordSchema,
-  forgotPasswordSchema,
-  resendCreatePasswordSchema,
-  signInSchema,
-  signUpSchema
+  signInAdminSchema
 } from './authSchema/authShema';
 export type {
-  CreateNewPasswordFormValues,
-  ForgotPasswordFormValues,
-  ResendCreatePasswordType,
-  SignInSchemaType,
-  SignUpSchemaType
+  SignInAdminSchemaType
 } from './authSchema/authShema';

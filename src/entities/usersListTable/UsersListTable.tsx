@@ -7,13 +7,10 @@ import {Loading, UniversalTable} from "@/shared/ui";
 import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import s from './UsersListTable.module.scss'
-import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
+import {useQueryParams, useModal, ModalKey, combineFirstLastName, formatDate} from "@/shared/lib";
 import {ApolloError} from "@apollo/client";
-import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
-import {DeleteUserModal} from "@/widget/modals/deleteUserModal/DeleteUserModal";
-import {ModalKey, useModal} from "@/shared/lib/hooks/useModal";
+import {DeleteUserModal} from "@/features/deleteUserModal/DeleteUserModal";
 import {useRouter} from "next/navigation";
-import {combineFirstLastName, formatDate} from "@/shared/lib";
 
 export type ActionTrigger = {
   id: number,

@@ -4,8 +4,8 @@ import { clsx } from 'clsx';
 
 import s from './UniversalTable.module.scss';
 import {ArrowIosDownOutline, TableParts, Typography} from "@momecap/ui-kit-snapmoment";
-import {EmptyTable} from "./ui/EmptyTable";
-import {Loading} from "../../ui/loading/Loading";
+import {EmptyTable} from "@/shared/ui/universalTable/ui/EmptyTable";
+import {Loading} from "@/shared/ui";
 
 interface UniversalTableProps<T> {
   colsStyles?: string;

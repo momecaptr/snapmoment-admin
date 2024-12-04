@@ -2,12 +2,11 @@
 import { UsersListTable} from "@/entities/usersListTable/UsersListTable";
 import {Button, Input, SelectUI} from "@momecap/ui-kit-snapmoment";
 import {ChangeEvent, useEffect, useState} from "react";
-import {useQueryParams} from "@/shared/lib/hooks/useQueryParams";
+import {useQueryParams, initialCurrentPage, selectOptionsForBan, selectOptionsForPagination} from "@/shared/lib";
 import {PaginationWithSelect} from "@/shared/ui";
 import {useGetAllUsersListTableQuery} from "@/graphql/queries/getAllUsersListTableData.generated";
 import {SortDirection, UserBlockStatus} from "@/graphql/types";
 import s from './UsersList.module.scss'
-import {initialCurrentPage, selectOptionsForBan, selectOptionsForPagination} from "@/shared/lib";
 
 export const UsersList = () => {
   const accessKey = localStorage.getItem('accessKey')

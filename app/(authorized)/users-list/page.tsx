@@ -1,4 +1,4 @@
-import {UsersList} from "@/pagesComponents/usersList/UsersList";
+import {UsersList} from "@/pagesComponents";
 
 export default function Page () {
   return (
