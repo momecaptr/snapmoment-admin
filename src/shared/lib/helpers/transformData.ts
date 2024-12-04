@@ -14,3 +14,10 @@ export const combineFirstLastName = ({firstName, lastName} : { firstName: string
   }
   return value
 }
+
+// Transformation capitalized shit to normal
+export const formatSubscriptionType = (value: string) => {
+  const types: Record<string, string> = { DAY: '1 day', MONTHLY: '1 month', WEEKLY: '7 days' };
+
+  return types[value] || value;
+};

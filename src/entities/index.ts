@@ -1,2 +1,2 @@
-export { UserPayments } from './userPayments/UserPayments'
+export { UserPaymentsTable } from './userPayments/UserPaymentsTable'
 export { UsersListTable } from './usersListTable/UsersListTable'

@@ -14,9 +14,10 @@ interface UniversalTableProps<T> {
   customRows?: ReactNode;
   emptyTableMessage?: string;
   isLoading?: boolean;
-  disableHoverHeaderStyle: string;
+  disableHoverHeaderStyle?: string;
   handleSortClick: (title: string) => void;
-  currentSortBy?: string
+  currentSortBy?: string,
+  globalStyle?: string
 }
 
 // Функция для создания заголовка колонки таблицы на основе типа данных. Добавление пробелов перед заглавными буквами,
@@ -37,7 +38,7 @@ const getHeader = (value: string) => {
 export const UniversalTable = <T extends object>(
   props: UniversalTableProps<T>
 ) => {
-  const { colsStyles, data, customRows, tHeadStyles, emptyTableMessage = 'No data', currentSortBy, isLoading, handleSortClick, disableHoverHeaderStyle } = props;
+  const { colsStyles, data, customRows, tHeadStyles, emptyTableMessage = 'No data', currentSortBy, isLoading, handleSortClick, disableHoverHeaderStyle, globalStyle } = props;
 
   // Создаем заголовки и колонки на основе ключей первого элемента данных
   // Заголовки колонок
@@ -67,7 +68,7 @@ export const UniversalTable = <T extends object>(
   }
 
   return (
-    <div className={s.tableContainer}>
+    <div className={clsx(globalStyle, s.tableContainer)}>
       <TableParts.Root className={s.table}>
         <TableParts.Head className={clsx(tHeadStyles)}>
           <TableParts.Row>

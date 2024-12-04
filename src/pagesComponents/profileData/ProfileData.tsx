@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {useState} from "react";
 import {userTabsVariants} from "@/shared/lib";
-import {UserPayments} from "@/entities";
+import {UserPaymentsTable} from "@/entities";
 import {BackBtn} from "@/shared/ui";
 import {ProfileHead, UserUploadedPhotosTab, UserTabsNavigation} from "@/widget";
 
@@ -12,8 +12,8 @@ export const ProfileData = ({userId} : {userId: number}) => {
   const renderActiveSection = () => {
     switch (activeSection) {
       case userTabsVariants.payments:
-        return <UserPayments userId={userId} />;
-      // return <h1>UserPayments</h1>;
+        return <UserPaymentsTable userId={userId} />;
+      // return <h1>UserPaymentsTable</h1>;
       case userTabsVariants.followers:
         // return <UserFollowers/>;
         return <h1>UserFollowers</h1>;
