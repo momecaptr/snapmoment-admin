@@ -102,7 +102,7 @@ export const UserPaymentsTable = (props: Props) => {
         colsStyles={s.columnsWidth}
         globalStyle={s.marginTableBtm}
       />
-      {!loading && <PaginationWithSelect
+      {!loading && oneUserPayments && oneUserPayments.getPaymentsByUser?.totalCount > 0 && <PaginationWithSelect
 		    pageNumber={pageNumber}
 		    pageSize={pageSize}
 		    selectOptions={selectOptionsForPagination}

@@ -5,6 +5,7 @@ import {userTabsVariants} from "@/shared/lib";
 import {UserPaymentsTable} from "@/entities";
 import {BackBtn} from "@/shared/ui";
 import {ProfileHead, UserUploadedPhotosTab, UserTabsNavigation} from "@/widget";
+import {UserFollowersTable} from "@/entities/userFollowersTable/UserFollowersTable";
 
 export const ProfileData = ({userId} : {userId: number}) => {
   const [activeSection, setActiveSection] = useState(userTabsVariants.uploadedPhotos);
@@ -15,8 +16,8 @@ export const ProfileData = ({userId} : {userId: number}) => {
         return <UserPaymentsTable userId={userId} />;
       // return <h1>UserPaymentsTable</h1>;
       case userTabsVariants.followers:
-        // return <UserFollowers/>;
-        return <h1>UserFollowers</h1>;
+        return <UserFollowersTable userId={userId}/>;
+        // return <h1>UserFollowers</h1>;
       case userTabsVariants.following:
         // return <UserFollowing />;
         return <h1>UserFollowing</h1>;
