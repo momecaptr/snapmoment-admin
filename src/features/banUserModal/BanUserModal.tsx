@@ -55,22 +55,15 @@ export const BanUserModal = (props: Props) => {
       setOpen(false);
     } catch(e) {
       showToast({message: `Something bad happened, ${e}, ${banUserError}}. Try again later`, type: 'error' })
-    } finally {
-      setBanReason(initialValueForBanReason)
     }
   };
-  const noHandler = () => {
-    setBanReason(initialValueForBanReason)
+
+  const closeHandler = () => {
     setOpen(false);
   };
 
-  const modalHandler = () => {
-    setBanReason(initialValueForBanReason)
-    setOpen(false)
-  }
-
   return (
-    <Modal className={s.card} onOpenChange={modalHandler} open={isOpen} title={'Ban user'}>
+    <Modal className={s.card} onOpenChange={closeHandler} open={isOpen} title={'Ban user'}>
       {banUserLoading ? <p>...Loading</p> :
         (
           <>
@@ -81,7 +74,7 @@ export const BanUserModal = (props: Props) => {
               <SelectUI selectOptions={selectOptionsForBanUserAction} className={s.selector} value={banReason} onValueChange={setBanReason} initialValue={initialValueForBanReason} />
             </div>
             <div className={s.buttonsWrapper}>
-              <Button onClick={noHandler}>
+              <Button onClick={closeHandler}>
                 <Typography variant={'h3'}>No</Typography>
               </Button>
               <Button

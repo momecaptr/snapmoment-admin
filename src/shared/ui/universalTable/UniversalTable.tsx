@@ -77,7 +77,7 @@ export const UniversalTable = <T extends object>(
   }, [data]);
 
   const handleIsBlockHead = (title: string) => {
-    return title.toLowerCase() === 'username' || title.length === 0 // Мы тут проверяем на соответствие username или пустой строке -- по этим двум названиям столбцов сортирвку делать не надо
+    return title === 'username' || title.length === 0 // Мы тут проверяем на соответствие username или пустой строке -- по этим двум названиям столбцов сортирвку делать не надо
   }
 
   const headClickHandler = (title: string) => () => {

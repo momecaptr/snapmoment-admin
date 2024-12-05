@@ -106,8 +106,11 @@ export const useQueryParams = () => {
       case 'dateAdded': {
         return 'createdAt'
       };
+      case 'subscription': {
+        return 'type'
+      };
       default: {
-        return ''
+        return tempSortBy
       }
     }
   }

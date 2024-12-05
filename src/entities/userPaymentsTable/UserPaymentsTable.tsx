@@ -52,8 +52,8 @@ export const UserPaymentsTable = (props: Props) => {
   type TransformedPaymentsDataSingleObj = {
     dateOfPayment: string,
     endDateOfSubscription: string,
-    price: number,
-    subscriptionType: string;
+    amount: number,
+    subscription: string;
     paymentType: string
   }
 
@@ -62,8 +62,8 @@ export const UserPaymentsTable = (props: Props) => {
       return {
         dateOfPayment: formatDate(item.dateOfPayment),
         endDateOfSubscription: formatDate(item.endDate),
-        price: item.price,
-        subscriptionType: formatSubscriptionType(item.type),
+        amount: item.price,
+        subscription: formatSubscriptionType(item.type),
         paymentType: item.paymentType as string
       };
     })
