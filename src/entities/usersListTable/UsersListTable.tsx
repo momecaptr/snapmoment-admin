@@ -7,49 +7,25 @@ import {Loading, UniversalTable} from "@/shared/ui";
 import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import s from './UsersListTable.module.scss'
-import {useQueryParams, useModal, ModalKey, combineFirstLastName, formatDate, MAIN_DOMAIN} from "@/shared/lib";
+import {useQueryParams, combineFirstLastName, formatDate, MAIN_DOMAIN, ActionTrigger} from "@/shared/lib";
 import {ApolloError} from "@apollo/client";
-import {DeleteUserModal} from "@/features/deleteUserModal/DeleteUserModal";
-import {useRouter} from "next/navigation";
 import * as React from "react";
-
-export type ActionTrigger = {
-  id: number,
-  actionName: string,
-  userName: string
-}
 
 type Props = {
   data: GetAllUsersListTableQuery | undefined,
   loading: boolean,
   error: ApolloError | undefined
   globalStyle?: string
+  actionTrigger: ({id, actionName, userName}: ActionTrigger) => void
 }
 
 export const UsersListTable = (props: Props) => {
-  const { data, loading, error, globalStyle } = props
-  const router = useRouter()
-  const [pickedId, setPickedId] = useState<number | undefined>()
+  const { data, loading, error, globalStyle, actionTrigger } = props
   const {setSortByQuery, currentSortBy} = useQueryParams()
-  const { isOpen: isDeleteUserModalOpen, setOpen: setIsDeleteUserModalOpen } = useModal(ModalKey.DeleteUser);
-
-  const actionTrigger = ({id, actionName, userName} : ActionTrigger) => {
-    console.log({id, actionName})
-    setPickedId(id)
-    console.log({pickedId})
-    if(actionName === 'delete') {
-      setIsDeleteUserModalOpen(true)
-    }
-    if(actionName === 'more'){
-      const url = `/profile/${id}/${userName}`
-      // window.open(url, '_blank')
-      router.push(url)
-    }
-  }
 
   type TransformedDataSingleObj = {
     userId: ReactElement,
-    username: string,
+    username: string | null,
     // profileLink: string | null | undefined,
     profileLink: ReactElement,
     dateAdded: string;
@@ -83,7 +59,6 @@ export const UsersListTable = (props: Props) => {
             {item.profile.userName}
           </Typography>
         ),
-        // profileLink: item.profile.userName,
         dateAdded: formatDate(item.createdAt),
         lastColumnWithButtons: <UsersListTableDropDownButton userData={item} actionTrigger={actionTrigger} />
       };
@@ -102,7 +77,6 @@ export const UsersListTable = (props: Props) => {
 
   return (
     <div className={globalStyle}>
-      <DeleteUserModal isOpen={isDeleteUserModalOpen} setOpen={setIsDeleteUserModalOpen} userId={pickedId} />
       {error && <p>{error.message}</p>}
       <UniversalTable<TransformedDataSingleObj>
         disableHoverHeaderStyle={s.disableHoverHeaderStyle}

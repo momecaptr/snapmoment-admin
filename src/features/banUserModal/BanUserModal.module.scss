@@ -1,0 +1,38 @@
+.card {
+  width: 100%;
+  max-width: 450px;
+
+  .text {
+    margin-bottom: 24px;
+  }
+
+  .select {
+    margin-bottom: 36px;
+    .selector {
+      background-color: var(--dark-100);
+    }
+  }
+
+  .buttonsWrapper {
+    display: flex;
+    justify-content: space-between;
+
+    .btn {
+      //background-color: var(--dark-100);
+      &:hover {
+        background-color: var(--dark-100);
+      }
+      &.disabled {
+        background-color: var(--dark-100);
+        border: none
+      }
+
+      .yes {
+        color: var(--accent-500);
+        &.disabled {
+           color: var(--light-900);
+        }
+      }
+    }
+  }
+}

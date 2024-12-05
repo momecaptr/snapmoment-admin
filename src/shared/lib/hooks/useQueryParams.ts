@@ -1,7 +1,7 @@
 "use client"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {useDebounce} from "./useDebounce";
-import {initialCurrentPage, selectOptionsForBan, selectOptionsForPagination} from "@/shared/lib";
+import {initialCurrentPage, selectOptionsForBanFilter, selectOptionsForPagination} from "@/shared/lib";
 
 export const useQueryParams = () => {
   const router = useRouter();
@@ -21,7 +21,7 @@ export const useQueryParams = () => {
   const currentSortBy = query.sortBy ?? '';
 
   // Получение значения бан-фильтра из параметров URL, или по умолчанию - 'ALL'
-  const banFilter = query.banFilter ? query.banFilter : selectOptionsForBan[0].value;
+  const banFilter = query.banFilter ? query.banFilter : selectOptionsForBanFilter[0].value;
 
   const debouncedSearchValue = useDebounce(searchTerm);
 
@@ -86,7 +86,7 @@ export const useQueryParams = () => {
   const setBanFilterQuery = (banFilterQuery: string) => {
     const newQuery = new URLSearchParams(searchParams);
 
-    if (banFilterQuery === selectOptionsForBan[0].value) {
+    if (banFilterQuery === selectOptionsForBanFilter[0].value) {
       newQuery.delete('banFilter');
     } else {
       newQuery.set('banFilter', banFilterQuery);
