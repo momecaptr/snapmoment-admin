@@ -10,3 +10,4 @@ export { selectOptionsForBanFilter } from './constants/selectOptionsForBanFilter
 export { selectOptionsForBanUserAction } from './constants/selectOptionsForBanUserAction'
 export { initialCurrentPage } from './constants/initialCurrentPage'
 export { actionOptionsUponUser } from './constants/actionOptionsUponUser'
+export type {ActionTrigger} from './types/actionTriggerType.type'

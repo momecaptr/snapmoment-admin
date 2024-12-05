@@ -7,10 +7,9 @@ import {Loading, UniversalTable} from "@/shared/ui";
 import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import s from './UsersListTable.module.scss'
-import {useQueryParams, combineFirstLastName, formatDate, MAIN_DOMAIN} from "@/shared/lib";
+import {useQueryParams, combineFirstLastName, formatDate, MAIN_DOMAIN, ActionTrigger} from "@/shared/lib";
 import {ApolloError} from "@apollo/client";
 import * as React from "react";
-import {ActionTrigger} from "@/pagesComponents/usersList/UsersList";
 
 type Props = {
   data: GetAllUsersListTableQuery | undefined,

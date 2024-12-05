@@ -10,8 +10,8 @@ import s from './UsersListTableDropDownButton.module.scss'
 import {CircleBackslashIcon} from "@radix-ui/react-icons";
 import {MouseEvent} from "react";
 import {User} from "@/graphql/types";
-import {ActionTrigger} from "@/entities/usersListTable/UsersListTable";
 import {actionOptionsUponUser} from "@/shared/lib/constants/actionOptionsUponUser";
+import {ActionTrigger} from "@/shared/lib";
 
 type Props = {
   userData: Omit<User, 'email' | 'profile'>,

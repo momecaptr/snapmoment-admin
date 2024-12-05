@@ -9,7 +9,7 @@ import {
   selectOptionsForBanFilter,
   selectOptionsForPagination,
   actionOptionsUponUser,
-  useModal, ModalKey, combineFirstLastName, useCustomToast
+  useModal, ModalKey, combineFirstLastName, useCustomToast, ActionTrigger
 } from "@/shared/lib";
 import {Loading, PaginationWithSelect} from "@/shared/ui";
 import s from './UsersList.module.scss'
@@ -19,12 +19,6 @@ import {SortDirection, UserBlockStatus} from "@/graphql/types";
 import {useGetAllUsersListTableQuery} from "@/graphql/queries/getAllUsersListTableData.generated";
 import {useUnBanUserMutation} from "@/graphql/mutations/unBanUser.generated";
 import {GET_ALL_USERS} from "@/graphql/queries/userData/getAllUsersData";
-
-export type ActionTrigger = {
-  id: number,
-  actionName: string,
-  userName: string
-}
 
 export const UsersList = () => {
   const [accessKey, setAccessKey] = useState<string | null>(null);
