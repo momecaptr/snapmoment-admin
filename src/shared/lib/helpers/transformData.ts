@@ -15,7 +15,7 @@ export const combineFirstLastName = ({firstName, lastName} : { firstName: string
   return value
 }
 
-// Transformation capitalized shit to normal
+// Transformation capitalized subscriptionType to normal - DAY - 1 day, MONTHLY - 1 month, WEEKLY - 7 days
 export const formatSubscriptionType = (value: string) => {
   const types: Record<string, string> = { DAY: '1 day', MONTHLY: '1 month', WEEKLY: '7 days' };
 

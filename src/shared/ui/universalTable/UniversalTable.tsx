@@ -29,10 +29,29 @@ const getHeader = (value: string) => {
 };
 
 /**
- * Принимает любые данные. Generic T - Интерфейс для ОДНОГО ОБЪЕКТА из массива объектов таблицы. На основе типа будут созданы заголовки колонок.
- * * data - массив данных любой структуры
- * * theadStyles - стили строки заголовка (например высота строки head, ширина колонок (nth-child)
- * @constructor
+ * **Универсальная таблица** для этого проекта.
+ *
+ * Принимает любые данные. Generic T - Интерфейс для _одного объекта_ из массива объектов таблицы.
+ * На основе типа будут созданы заголовки колонок.
+ *
+ * **Примечание**: передавать тип T необязательно благодаря TypeScript type inference, который выводит тип на основе `data: T[]`.
+ *
+ * @param {Object} props - Свойства компонента.
+ * @param {T[]} props.data - _Массив данных любой структуры._
+ * @param {string} [props.tHeadStyles] - _Стили строки заголовка_ (например, высота строки или ширина колонок через `nth-child`).
+ * @param {string} [props.colsStyles] - _Стили для колонок_ (можно настроить ширину каждой колонки).
+ * @param {ReactNode} [props.customRows] - _Кастомные строки таблицы_ (можно вместо `data` передать свои строки).
+ * @param {string} [props.emptyTableMessage='No data'] - _Сообщение для пустой таблицы._
+ * @param {boolean} [props.isLoading=false] - _Флаг загрузки данных._
+ * @param {string} [props.disableHoverHeaderStyle] - _Стили для задизейбленных заголовков колонок_ (например, отключение подсветки при наведении).
+ * @param {Function} props.handleSortClick - _Обработчик клика на заголовок колонки._
+ * @param {string} [props.currentSortBy] - _Параметр, по которому выполнена сортировка._
+ * @param {string} [props.globalStyle] - _Глобальные стили для таблицы_ (например, для добавления отступов снаружи).
+ * @example
+ * const obj = {userName: 'John', lastName: 'Doe', age: 30};
+ * // Функция getHeaders переведет это в следующее
+ * userName -> User name
+ * lastName -> Last name
  */
 // Универсальный компонент таблицы
 export const UniversalTable = <T extends object>(
