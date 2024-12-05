@@ -1,15 +1,13 @@
-import {GetAllPaymentsQuery} from "@/graphql/queries/payments/getAllPayments.generated";
-import {ApolloError} from "@apollo/client";
-import {combineFirstLastName, formatDate, MAIN_DOMAIN, selectOptionsForPagination, useQueryParams} from "@/shared/lib";
-import {ReactElement} from "react";
+import { GetAllPaymentsQuery } from "@/graphql/queries/payments/getAllPayments.generated";
+import { ApolloError } from "@apollo/client";
+import { formatDate, useQueryParams } from "@/shared/lib";
+import { ReactElement } from "react";
 import s from "@/entities/usersListTable/UsersListTable.module.scss";
-import {CircleBackslashIcon} from "@radix-ui/react-icons";
-import {personOutline, personOutlineWhite, PictureOutline, Typography} from "@momecap/ui-kit-snapmoment";
-import {UsersListTableDropDownButton} from "@/entities/usersListTable/ui/UsersListTableDropDownButton";
-import {Loading, PaginationWithSelect, UniversalTable} from "@/shared/ui";
+import { personOutlineWhite, Typography } from "@momecap/ui-kit-snapmoment";
+import { Loading, UniversalTable } from "@/shared/ui";
 import * as React from "react";
 import Image from "next/image";
-import {formatSubscriptionType} from "@/shared/lib/helpers/transformData";
+import { formatSubscriptionType } from "@/shared/lib/helpers/transformData";
 
 type Props = {
   data: GetAllPaymentsQuery | undefined,
@@ -19,7 +17,7 @@ type Props = {
 }
 
 export const PaymentsListTable = (props: Props) => {
-  const { data, loading, error, globalStyle } = props
+  const { data, loading } = props
 
   const {setSortByQuery, currentSortBy} = useQueryParams()
 

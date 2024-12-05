@@ -3,6 +3,36 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {useDebounce} from "./useDebounce";
 import {initialCurrentPage, selectOptionsForBanFilter, selectOptionsForPagination} from "@/shared/lib";
 
+/**
+ * currentSortBy - это совместно параметр сортировки и направление, в виде currentSortBy = 'userId-asc'
+ * tempSortBy - это деструктурированный currentSortBy, то что до '-', а newSortDirection - это после '-'
+ * Таблица все-таки не очень хорошая, или бэк не очень хорошо организован (есть расхождения в свойствах, которые должны быть одиноаковыми, но они разные, а еще userName косячный)
+ * Из-за этого приходится танцевать с бубном - В функции getNewSortBy производим анализ
+ * Превращаем те значения которые в трансформированных данных для таблицы в те, которые должен хавать сервер для организации сортировки
+ * Сервер принимает только определенные наименования. Вот тут то мы и произведем эту трансформацию
+ * @example
+ * // Представим что мы трансформировали данные от сервера для таблицы
+ * const tranformedDataForTable = data.map(item => {
+ *    return {
+ *      {
+ *        userId: item.id,
+ *        userName: item.firstName + ' ' + item.lastName,
+ *        dateAdded: item.createdAt
+ *      }
+ *    }
+ * }
+ * // Данные положили в таблицу (не даем отдельный массив для наименования header-ов таблицы, все работает по объекту в массиве)
+ * // Когда кликаем на header таблицы, то в query попадает название свойства и направление сортировки
+ * const currentSortBy = 'userId-asc'
+ * // userId - потому что так я трансформировал данные для таблицы, А сервер принимает например не userId, а просто id
+ * // Поэтому эта функция сделает так
+ * userId --> id
+ * // В итоге для сортировки выносим отсюда такие поля:
+ * return {
+ *   newSortDirection,
+ *   newSortBy: getNewSortBy(),
+ * }
+ */
 export const useQueryParams = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -95,6 +125,7 @@ export const useQueryParams = () => {
   };
 
   const [tempSortBy, newSortDirection] = currentSortBy.split('-')
+
   const getNewSortBy = () => {
     switch (tempSortBy){
       case 'userId': {

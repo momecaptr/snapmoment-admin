@@ -15,13 +15,10 @@ export const ProfileData = ({userId} : {userId: number}) => {
     switch (activeSection) {
       case userTabsVariants.payments:
         return <UserPaymentsTable userId={userId} />;
-      // return <h1>UserPaymentsTable</h1>;
       case userTabsVariants.followers:
         return <UserFollowersTable userId={userId}/>;
-        // return <h1>UserFollowers</h1>;
       case userTabsVariants.following:
         return <UserFollowingTable userId={userId} />;
-        // return <h1>UserFollowing</h1>;
       case userTabsVariants.uploadedPhotos:
         return <UserUploadedPhotosTab userId={userId}/>;
       default:
@@ -31,7 +28,6 @@ export const ProfileData = ({userId} : {userId: number}) => {
 
   return (
     <>
-      <h1>Ну это здравствуйте, конечно</h1>
       <BackBtn href={`/users-list`}>
         Back to Users List
       </BackBtn>

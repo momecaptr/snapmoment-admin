@@ -4,6 +4,8 @@ import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
 import {useRemoveUserMutation} from "@/graphql/mutations/removeUser.generated";
 import {useCustomToast, useQueryParams} from "@/shared/lib";
 import {GET_ALL_USERS} from "@/graphql/queries/userData/getAllUsersData";
+import {useEffect, useState} from "react";
+import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
 
 type Props = {
   userId: number|undefined;
@@ -13,6 +15,8 @@ type Props = {
 };
 export const DeleteUserModal = (props: Props) => {
   const { userId, isOpen, setOpen, pickedUserName } = props;
+  const {accessKey} = useGetAccessKeyFromStorage()
+
   const { showToast } = useCustomToast()
   const { pageSize, pageNumber, newSortDirection, newSortBy, banFilter, searchTerm } = useQueryParams()
 
@@ -21,12 +25,12 @@ export const DeleteUserModal = (props: Props) => {
 
   const removeUserHandler = async () => {
     await removeUser({
-      context: { base64UsernamePassword: localStorage.getItem('accessKey') },
+      context: { base64UsernamePassword: accessKey },
       variables: {
         userId: userId ?? 0
       },
       refetchQueries: [{
-        context: { base64UsernamePassword: localStorage.getItem('accessKey') },
+        context: { base64UsernamePassword: accessKey },
         query: GET_ALL_USERS,
         variables: {
           pageNumber: pageNumber,

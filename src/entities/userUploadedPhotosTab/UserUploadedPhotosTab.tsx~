@@ -5,9 +5,14 @@ import Image from "next/image";
 import {useGetAllPostsQuery} from "@/graphql/queries/posts/getAllPosts.generated";
 import {useQueryParams} from "@/shared/lib";
 import {SortDirection} from "@/graphql/types";
+import {clsx} from "clsx";
+import {Typography} from "@momecap/ui-kit-snapmoment";
+import {useEffect, useState} from "react";
 
 export const UserUploadedPhotosTab = ({userId} : {userId: number}) => {
-  const accessKey = localStorage.getItem('accessKey')
+
+  const {accessKey} = useGetAccessKeyFromStorage
+
   const {searchTerm, newSortDirection, newSortBy} = useQueryParams()
   const {data} = useGetPostsByUserQuery({
     variables: {
@@ -30,13 +35,11 @@ export const UserUploadedPhotosTab = ({userId} : {userId: number}) => {
     }
   })
 
-  console.log(data?.getPostsByUser)
-
   return (
-    <div className={s.layout}>
+    <div className={clsx(data?.getPostsByUser.items?.length === 0 ? s.empty : s.layout)}>
       {
-        !data?.getPostsByUser.items ? (
-          <h1>No images</h1>
+        data?.getPostsByUser.items?.length === 0 ? (
+          <Typography variant={'medium_text_14'}>No images added yet</Typography>
         ) : (
           data?.getPostsByUser.items?.map(item => {
             return (
