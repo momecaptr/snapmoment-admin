@@ -36,8 +36,8 @@ export const UsersListTable = (props: Props) => {
     ? data.getUsers.users.map((item) => {
       return {
         userId:(
-          <div className={s.userIdCell}>
-            <div className={s.userBanIcon} >
+          <div className={s.userNameCell}>
+            <div className={s.userNameImgWrapper} >
               {item.userBan?.reason && <CircleBackslashIcon width={'24px'} height={'24px'}/> }
             </div>
             <Typography variant={'medium_text_14'}>
