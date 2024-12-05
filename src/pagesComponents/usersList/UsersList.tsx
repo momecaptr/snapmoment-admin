@@ -27,7 +27,6 @@ export type ActionTrigger = {
 }
 
 export const UsersList = () => {
-  // const accessKey = localStorage.getItem('accessKey')
   const [accessKey, setAccessKey] = useState<string | null>(null);
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -59,8 +58,6 @@ export const UsersList = () => {
     skip: !accessKey
   })
 
-  console.log({usersListData: data})
-
   useEffect(() => {
     if (data) {
       const maxNumberOfPages = Math.ceil((data?.getUsers.pagination.totalCount ?? 0) / pageSize)
@@ -79,22 +76,18 @@ export const UsersList = () => {
    * Определяется действие по actionName, которое приходит от дочернего компонента
    */
   const actionTrigger = async ({id, actionName, userName} : ActionTrigger) => {
-    console.log({id, actionName, userName})
     setPickedUserId(id)
-    console.log({pickedId: pickedUserId})
     if(actionName === actionOptionsUponUser.delete) {
       setIsDeleteUserModalOpen(true)
     }
     if(actionName === actionOptionsUponUser.more){
       const url = `/profile/${id}/${userName}`
-      // window.open(url, '_blank')
       router.push(url)
     }
     if(actionName === actionOptionsUponUser.ban) {
       setIsBanUserModalOpen(true)
     }
     if(actionName === actionOptionsUponUser.unban) {
-      console.log('а шо это', actionName)
       try {
         await unBanUser(
           {

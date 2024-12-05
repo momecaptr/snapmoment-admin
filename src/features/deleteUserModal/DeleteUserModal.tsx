@@ -15,7 +15,6 @@ export const DeleteUserModal = (props: Props) => {
   const { userId, isOpen, setOpen, pickedUserName } = props;
   const { showToast } = useCustomToast()
   const { pageSize, pageNumber, newSortDirection, newSortBy, banFilter, searchTerm } = useQueryParams()
-  console.log({userIdFromModal: userId})
 
   // Remove User
   const [removeUser, { loading: isRemoveLoading, error: errorWhileRemove }] = useRemoveUserMutation()

@@ -20,7 +20,6 @@ export const BanUserModal = (props: Props) => {
   const { pageSize, pageNumber, newSortDirection, newSortBy, banFilter, searchTerm } = useQueryParams()
   const initialValueForBanReason = 'Reason for ban'
   const [banReason, setBanReason] = useState(initialValueForBanReason)
-  console.log({userIdFromModal: userId})
 
   // Ban User
   const [banUser, {loading: banUserLoading, error: banUserError}] = useBanUserMutation()
