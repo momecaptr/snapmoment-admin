@@ -1,3 +1,10 @@
+.empty {
+  //display: ;
+  //height: 100px;
+  //display: flex;
+  padding-top: 66px;
+  text-align: center;
+}
 .layout {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Явная ширина столбцов */

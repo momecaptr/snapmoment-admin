@@ -5,8 +5,9 @@ import {selectOptionsForBanFilter, selectOptionsForBanUserAction, useCustomToast
 import {GET_ALL_USERS} from "@/graphql/queries/userData/getAllUsersData";
 import {useBanUserMutation} from "@/graphql/mutations/banUser.generated";
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {clsx} from "clsx";
+import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
 
 type Props = {
   userId: number|undefined;
@@ -16,6 +17,8 @@ type Props = {
 };
 export const BanUserModal = (props: Props) => {
   const { userId, isOpen, setOpen, pickedUserName } = props;
+  const {accessKey} = useGetAccessKeyFromStorage()
+
   const { showToast } = useCustomToast()
   const { pageSize, pageNumber, newSortDirection, newSortBy, banFilter, searchTerm } = useQueryParams()
   const initialValueForBanReason = 'Reason for ban'
@@ -31,10 +34,10 @@ export const BanUserModal = (props: Props) => {
         userId: userId ?? 0
       },
       context: {
-        base64UsernamePassword: localStorage.getItem('accessKey')
+        base64UsernamePassword: accessKey
       },
       refetchQueries: [{
-        context: { base64UsernamePassword: localStorage.getItem('accessKey') },
+        context: { base64UsernamePassword: accessKey },
         query: GET_ALL_USERS,
         variables: {
           pageNumber: pageNumber,

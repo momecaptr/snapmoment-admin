@@ -12,7 +12,6 @@ import {Typography} from "@momecap/ui-kit-snapmoment";
 import {Loading, PaginationWithSelect, UniversalTable} from "@/shared/ui";
 import {useGetFollowersQuery} from "@/graphql/queries/followers/getFollowers.generated";
 import * as React from "react";
-import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
 
 type Props = {
   userId: number,
@@ -21,7 +20,7 @@ type Props = {
 
 export const UserFollowersTable = (props: Props) => {
   const {userId, globalStyle} = props
-  const {accessKey} = useGetAccessKeyFromStorage()
+  const {accessKey} = useGetAccessKeyFromStorage
 
   const {showToast} = useCustomToast()
   const {newSortDirection, newSortBy, pageSize, pageNumber, setSortByQuery, setCurrentPageQuery, setPageSizeQuery, currentSortBy} = useQueryParams()

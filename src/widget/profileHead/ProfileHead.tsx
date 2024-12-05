@@ -5,10 +5,12 @@ import Image from "next/image";
 import {Typography} from "@momecap/ui-kit-snapmoment";
 import {formatDate, MAIN_DOMAIN} from "@/shared/lib";
 import {useGetOneUserQuery} from "@/graphql/queries/userData/getOneUserData.generated";
+import {useEffect, useState} from "react";
 
 export const ProfileHead = ({userId} : {userId: number}) => {
 
-  const accessKey = localStorage.getItem('accessKey')
+  const {accessKey} = useGetAccessKeyFromStorage
+
 
   const {data} = useGetOneUserQuery({
     variables: {

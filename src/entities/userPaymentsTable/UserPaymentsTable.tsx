@@ -9,9 +9,10 @@ import {
 import {SortDirection} from "@/graphql/types";
 import {useGetAllPaymentsQuery} from "@/graphql/queries/payments/getAllPayments.generated";
 import {useGetPaymentsByUserQuery} from "@/graphql/queries/payments/getPaymentsByUser.generated";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {Loading, PaginationWithSelect, UniversalTable} from "@/shared/ui";
 import {formatSubscriptionType} from "@/shared/lib/helpers/transformData";
+import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
 
 type Props = {
   userId: number,
@@ -20,8 +21,9 @@ type Props = {
 
 export const UserPaymentsTable = (props: Props) => {
   const {userId, globalStyle} = props
+  const {accessKey} = useGetAccessKeyFromStorage()
+
   const {showToast} = useCustomToast()
-  const accessKey = localStorage.getItem('accessKey')
   const {searchTerm, newSortDirection, newSortBy, pageSize, pageNumber, setSortByQuery, setCurrentPageQuery, setPageSizeQuery, currentSortBy} = useQueryParams()
   const {data: allPaymentsData} = useGetAllPaymentsQuery({
     variables: {

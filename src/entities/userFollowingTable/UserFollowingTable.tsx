@@ -7,11 +7,12 @@ import {
   useQueryParams
 } from "@/shared/lib";
 import {SortDirection} from "@/graphql/types";
-import {ReactElement, useEffect} from "react";
+import {ReactElement, useEffect, useState} from "react";
 import {Typography} from "@momecap/ui-kit-snapmoment";
 import {Loading, PaginationWithSelect, UniversalTable} from "@/shared/ui";
 import {useGetFollowingQuery} from "@/graphql/queries/following/getFollowing.generated";
 import * as React from "react";
+import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
 
 type Props = {
   userId: number,
@@ -20,8 +21,9 @@ type Props = {
 
 export const UserFollowingTable = (props: Props) => {
   const {userId, globalStyle} = props
+  const {accessKey} = useGetAccessKeyFromStorage()
+
   const {showToast} = useCustomToast()
-  const accessKey = localStorage.getItem('accessKey')
   const {newSortDirection, newSortBy, pageSize, pageNumber, setSortByQuery, setCurrentPageQuery, setPageSizeQuery, currentSortBy} = useQueryParams()
 
   const {data: userFollowing, loading, error} = useGetFollowingQuery({
