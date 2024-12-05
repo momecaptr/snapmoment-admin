@@ -1,24 +1,48 @@
 "use client"
+import * as React from "react";
 import { UsersListTable} from "@/entities";
 import {Button, Input, SelectUI} from "@momecap/ui-kit-snapmoment";
 import {ChangeEvent, Suspense, useEffect, useState} from "react";
-import {useQueryParams, initialCurrentPage, selectOptionsForBan, selectOptionsForPagination} from "@/shared/lib";
+import {
+  useQueryParams,
+  initialCurrentPage,
+  selectOptionsForBanFilter,
+  selectOptionsForPagination,
+  actionOptionsUponUser,
+  useModal, ModalKey, combineFirstLastName, useCustomToast
+} from "@/shared/lib";
 import {Loading, PaginationWithSelect} from "@/shared/ui";
-import {useGetAllUsersListTableQuery} from "@/graphql/queries/getAllUsersListTableData.generated";
-import {SortDirection, UserBlockStatus} from "@/graphql/types";
 import s from './UsersList.module.scss'
+import {BanUserModal, DeleteUserModal} from "@/features";
+import {useRouter} from "next/navigation";
+import {SortDirection, UserBlockStatus} from "@/graphql/types";
+import {useGetAllUsersListTableQuery} from "@/graphql/queries/getAllUsersListTableData.generated";
+import {useUnBanUserMutation} from "@/graphql/mutations/unBanUser.generated";
+import {GET_ALL_USERS} from "@/graphql/queries/userData/getAllUsersData";
+
+export type ActionTrigger = {
+  id: number,
+  actionName: string,
+  userName: string
+}
 
 export const UsersList = () => {
   // const accessKey = localStorage.getItem('accessKey')
   const [accessKey, setAccessKey] = useState<string | null>(null);
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const key = localStorage.getItem('accessKey');
       setAccessKey(key);
     }
   }, []);
+
+  const router = useRouter()
   const {newSortBy, banFilter, setBanFilterQuery, newSortDirection, pageSize, pageNumber, debouncedSearchValue, setSortByQuery, setSearchQuery, searchTerm, setPageSizeQuery, setCurrentPageQuery} = useQueryParams()
+  const [pickedUserId, setPickedUserId] = useState<number | undefined>()
+  const { isOpen: isDeleteUserModalOpen, setOpen: setIsDeleteUserModalOpen } = useModal(ModalKey.DeleteUser);
+  const { isOpen: isBanUserModalOpen, setOpen: setIsBanUserModalOpen } = useModal(ModalKey.BanUser);
+  const {showToast} = useCustomToast()
+  const [unBanUser, {loading: unBanUserLoading, error: unBanUserError}] = useUnBanUserMutation()
 
   const {data, loading, error} =  useGetAllUsersListTableQuery({
     variables: {
@@ -50,6 +74,52 @@ export const UsersList = () => {
     }
   }, [data, pageSize, pageNumber])
 
+  /**
+   * Эта функция нужна для разных действий (в usersListTable в dropDown меню прокидывается) над пользователем - удалить, заблокать, разблокать, посмотреть профиль.
+   * Определяется действие по actionName, которое приходит от дочернего компонента
+   */
+  const actionTrigger = async ({id, actionName, userName} : ActionTrigger) => {
+    console.log({id, actionName, userName})
+    setPickedUserId(id)
+    console.log({pickedId: pickedUserId})
+    if(actionName === actionOptionsUponUser.delete) {
+      setIsDeleteUserModalOpen(true)
+    }
+    if(actionName === actionOptionsUponUser.more){
+      const url = `/profile/${id}/${userName}`
+      // window.open(url, '_blank')
+      router.push(url)
+    }
+    if(actionName === actionOptionsUponUser.ban) {
+      setIsBanUserModalOpen(true)
+    }
+    if(actionName === actionOptionsUponUser.unban) {
+      console.log('а шо это', actionName)
+      try {
+        await unBanUser(
+          {
+            variables: {userId: id},
+            context: {base64UsernamePassword: accessKey},
+            refetchQueries: [{
+              context: { base64UsernamePassword: localStorage.getItem('accessKey') },
+              query: GET_ALL_USERS,
+              variables: {
+                pageNumber: pageNumber,
+                pageSize: pageSize,
+                sortBy: newSortBy,
+                sortDirection: newSortDirection,
+                searchTerm: searchTerm,
+                statusFilter: banFilter
+              }
+            }]
+          }
+        )
+        showToast({message: 'User unbanned', type: 'success' })
+      } catch (e) {
+        showToast({message: `Something bad happened, ${unBanUserError}}`, type: 'error' })
+      }
+    }
+  }
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentPageQuery(Number(initialCurrentPage))
@@ -61,15 +131,21 @@ export const UsersList = () => {
     setBanFilterQuery(items)
   }
 
+  const foundUser = data?.getUsers?.users.find(user => user.id === pickedUserId)
+  const combinedName = combineFirstLastName({firstName: foundUser?.profile.firstName, lastName: foundUser?.profile.lastName, isNullToReturn: true})
+  const userName = combinedName === null ? foundUser?.userName : combinedName
+
   return (
     <>
+      <DeleteUserModal isOpen={isDeleteUserModalOpen} setOpen={setIsDeleteUserModalOpen} userId={pickedUserId} pickedUserName={userName}/>
+      <BanUserModal isOpen={isBanUserModalOpen} setOpen={setIsBanUserModalOpen} userId={pickedUserId} pickedUserName={userName}/>
       <div className={s.usersListHeader}>
         <Input callback={setSearchQuery} onChange={handleSearchChange} type={'search'} currentValue={searchTerm} className={s.input} />
         <div className={s.select}>
-          <SelectUI selectOptions={selectOptionsForBan} value={banFilter} onValueChange={handleBanFilter} />
+          <SelectUI selectOptions={selectOptionsForBanFilter} value={banFilter} onValueChange={handleBanFilter} />
         </div>
       </div>
-      <UsersListTable data={data} loading={loading} error={error} globalStyle={s.tableGlobal}/>
+      <UsersListTable data={data} loading={loading} error={error} globalStyle={s.tableGlobal} actionTrigger={actionTrigger}/>
       {!loading && <PaginationWithSelect
         pageNumber={pageNumber}
         pageSize={pageSize}

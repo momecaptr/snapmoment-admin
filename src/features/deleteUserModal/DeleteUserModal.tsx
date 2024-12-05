@@ -9,11 +9,12 @@ type Props = {
   userId: number|undefined;
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
+  pickedUserName: string | null | undefined
 };
 export const DeleteUserModal = (props: Props) => {
-  const { userId, isOpen, setOpen } = props;
-  const {showToast} = useCustomToast()
-  const {pageSize, pageNumber, newSortDirection, newSortBy, banFilter, debouncedSearchValue, setSortByQuery, setSearchQuery, searchTerm, setPageSizeQuery, setCurrentPageQuery} = useQueryParams()
+  const { userId, isOpen, setOpen, pickedUserName } = props;
+  const { showToast } = useCustomToast()
+  const { pageSize, pageNumber, newSortDirection, newSortBy, banFilter, searchTerm } = useQueryParams()
   console.log({userIdFromModal: userId})
 
   // Remove User
@@ -55,12 +56,12 @@ export const DeleteUserModal = (props: Props) => {
   };
 
   return (
-    <Modal className={s.card} onOpenChange={() => setOpen(false)} open={isOpen} title={'Delete Post'}>
+    <Modal className={s.card} onOpenChange={() => setOpen(false)} open={isOpen} title={'Delete user'}>
       {isRemoveLoading ? <p>...Loading</p> :
         (
           <>
             <div className={s.text}>
-              <Typography variant={'regular_text_16'}>Are you sure you want to delete this post?</Typography>
+              <Typography variant={'regular_text_16'}>Are you sure you want to delete user {pickedUserName}?</Typography>
             </div>
             <div className={s.buttonsWrapper}>
               <Button onClick={yesHandler} variant={'outlined'}>
