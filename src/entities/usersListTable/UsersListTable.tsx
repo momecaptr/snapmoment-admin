@@ -12,6 +12,9 @@ import {ApolloError} from "@apollo/client";
 import {DeleteUserModal} from "@/features/deleteUserModal/DeleteUserModal";
 import {useRouter} from "next/navigation";
 import * as React from "react";
+import {actionOptionsUponUser} from "@/shared/lib/constants/actionOptionsUponUser";
+import {useBanUserMutation} from "@/graphql/mutations/banUser.generated";
+import {useUnBanUserMutation} from "@/graphql/mutations/unBanUser.generated";
 
 export type ActionTrigger = {
   id: number,
@@ -32,18 +35,30 @@ export const UsersListTable = (props: Props) => {
   const [pickedId, setPickedId] = useState<number | undefined>()
   const {setSortByQuery, currentSortBy} = useQueryParams()
   const { isOpen: isDeleteUserModalOpen, setOpen: setIsDeleteUserModalOpen } = useModal(ModalKey.DeleteUser);
+  const [banUser, {loading: banUserLoading, error: banUserError}] = useBanUserMutation()
+  const [unBanUser, {loading: unBanUserLoading, error: unBanUserError}] = useUnBanUserMutation()
 
+  /**
+   * Эта функция нужна для разных действий (в dropDown меню прокидывается) над пользователем - удалить, заблокать, разблокать, посмотреть профиль.
+   * Определяется действие по actionName, которое приходит от дочернего компонента
+  */
   const actionTrigger = ({id, actionName, userName} : ActionTrigger) => {
     console.log({id, actionName})
     setPickedId(id)
     console.log({pickedId})
-    if(actionName === 'delete') {
+    if(actionName === actionOptionsUponUser.delete) {
       setIsDeleteUserModalOpen(true)
     }
-    if(actionName === 'more'){
+    if(actionName === actionOptionsUponUser.more){
       const url = `/profile/${id}/${userName}`
       // window.open(url, '_blank')
       router.push(url)
+    }
+    if(actionName === actionOptionsUponUser.ban) {
+      console.log('а шо это', actionName)
+    }
+    if(actionName === actionOptionsUponUser.unban) {
+      console.log('а шо это', actionName)
     }
   }
 
@@ -83,7 +98,6 @@ export const UsersListTable = (props: Props) => {
             {item.profile.userName}
           </Typography>
         ),
-        // profileLink: item.profile.userName,
         dateAdded: formatDate(item.createdAt),
         lastColumnWithButtons: <UsersListTableDropDownButton userData={item} actionTrigger={actionTrigger} />
       };

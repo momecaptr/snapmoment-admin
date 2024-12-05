@@ -1,7 +1,7 @@
 "use client"
 import s from './DeleteUserModal.module.scss';
 import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
-import {useRemoveUserMutation} from "@/graphql/queries/removeUser.generated";
+import {useRemoveUserMutation} from "@/graphql/mutations/removeUser.generated";
 import {useCustomToast, useQueryParams} from "@/shared/lib";
 import {GET_ALL_USERS} from "@/graphql/queries/userData/getAllUsersData";
 
