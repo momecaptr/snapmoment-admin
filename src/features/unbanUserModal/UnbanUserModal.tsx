@@ -1,11 +1,10 @@
 "use client"
 import s from './UnbanUserModal.module.scss';
-import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
-import {useCustomToast, useQueryParams} from "@/shared/lib";
-import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
-import {useUnBanUserMutation} from "@/graphql/mutations/unBanUser.generated";
-import {Post} from "@/graphql/types";
-import {GET_ONE_USER} from "@/graphql/queries/userData/getOneUserData";
+import { Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
+import { useCustomToast } from "@/shared/lib";
+import { useGetAccessKeyFromStorage } from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
+import { useUnBanUserMutation } from "@/graphql/mutations/unBanUser.generated";
+import { GET_ONE_USER } from "@/graphql/queries/userData/getOneUserData";
 
 type Props = {
   isOpen: boolean;
