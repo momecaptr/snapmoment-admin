@@ -125,7 +125,7 @@ export const UsersList = () => {
   return (
     <>
       <DeleteUserModal isOpen={isDeleteUserModalOpen} setOpen={setIsDeleteUserModalOpen} userId={pickedUserId} pickedUserName={userName}/>
-      <BanUserModal isOpen={isBanUserModalOpen} setOpen={setIsBanUserModalOpen} userId={pickedUserId} pickedUserName={userName}/>
+      <BanUserModal isOpen={isBanUserModalOpen} setOpen={setIsBanUserModalOpen} pickedUserIdAndName={{userId: pickedUserId, userName}} />
       <div className={s.usersListHeader}>
         <Input callback={setSearchQuery} onChange={handleSearchChange} type={'search'} currentValue={searchTerm} className={s.input} />
         <div className={s.select}>
