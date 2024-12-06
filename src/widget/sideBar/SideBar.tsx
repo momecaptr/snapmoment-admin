@@ -44,7 +44,6 @@ export const SideBar = (props: Props) => {
         {mainLinks.map(({ IconComponent, name, path, value }) => (
           <Link className={s.btn} href={path} key={value} onClick={() => setActiveIcon(value)} shallow>
             <IconComponent
-              // className={clsx(s.icon, { [s.active]: activeIcon === value }, value === 'search' && s.searchIcon)}
               className={clsx(s.icon)}
             />
             <Typography as={'span'} className={s.btnText} variant={'medium_text_14'}>
