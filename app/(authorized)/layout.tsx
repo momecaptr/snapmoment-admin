@@ -15,7 +15,6 @@ export default function NotAuthLayout({
     <ApolloProvider client={client}>
       <Suspense>
         <div className={s.layout}>
-          {/*<body className={`${geistSans.variable} ${geistMono.variable}`}>*/}
           <div className={s.sidebar}>
             <SideBar/>
           </div>
