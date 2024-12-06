@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const PaymentsListTable = (props: Props) => {
-  const { data, loading, globalStyle } = props
+  const { data, loading } = props
 
   const {setSortByQuery, currentSortBy} = useQueryParams()
 
@@ -63,7 +63,7 @@ export const PaymentsListTable = (props: Props) => {
   }
 
   return (
-    <div className={globalStyle}>
+    <div>
       <UniversalTable<TransformedPaymentsDataSingleObj>
         disableHoverHeaderStyle={s.disableHoverHeaderStyle}
         data={transformedData}

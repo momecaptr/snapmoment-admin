@@ -1,3 +1,6 @@
-export { UserPaymentsTable } from '@/entities/userPaymentsTable/UserPaymentsTable'
+export { UserPaymentsTable } from './userPaymentsTable/UserPaymentsTable'
+export { UserUploadedPhotosTab } from './userUploadedPhotosTab/UserUploadedPhotosTab'
 export { UsersListTable } from './usersListTable/UsersListTable'
+export { UserFollowersTable } from './userFollowersTable/UserFollowersTable'
+export { UserFollowingTable } from './userFollowingTable/UserFollowingTable'
 export { PaymentsListTable } from './paymentsListTable/PaymentsListTable'

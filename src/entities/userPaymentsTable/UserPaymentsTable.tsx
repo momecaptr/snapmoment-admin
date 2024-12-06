@@ -21,7 +21,7 @@ type Props = {
 
 export const UserPaymentsTable = (props: Props) => {
   const {userId, globalStyle} = props
-  const {accessKey} = useGetAccessKeyFromStorage()
+  const accessKey = useGetAccessKeyFromStorage()
 
   const {showToast} = useCustomToast()
   const {searchTerm, newSortDirection, newSortBy, pageSize, pageNumber, setSortByQuery, setCurrentPageQuery, setPageSizeQuery, currentSortBy} = useQueryParams()

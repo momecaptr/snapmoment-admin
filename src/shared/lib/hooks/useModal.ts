@@ -13,6 +13,7 @@ export enum ModalKey {
   DeletePost = 'DeletePost',
   DeleteUser = 'DeleteUser',
   BanUser = 'BanUser',
+  UnBanUser = 'UnBanUser',
   PaymentModals = 'PaymentModals',
   PaymentProceed = 'PaymentProceed',
   Success = 'Success',

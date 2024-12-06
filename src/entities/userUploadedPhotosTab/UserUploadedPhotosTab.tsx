@@ -12,7 +12,7 @@ import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFrom
 
 export const UserUploadedPhotosTab = ({userId} : {userId: number}) => {
 
-  const {accessKey} = useGetAccessKeyFromStorage()
+  const accessKey = useGetAccessKeyFromStorage()
 
   const {searchTerm, newSortDirection, newSortBy} = useQueryParams()
   const {data} = useGetPostsByUserQuery({
@@ -22,18 +22,6 @@ export const UserUploadedPhotosTab = ({userId} : {userId: number}) => {
     context: {
       base64UsernamePassword: accessKey
     },
-  })
-  const {data: notThatData2} = useGetAllPostsQuery({
-    variables: {
-      endCursorPostId: 10,
-      searchTerm,
-      pageSize: 8,
-      sortBy: newSortBy,
-      sortDirection: newSortDirection as SortDirection.Desc | SortDirection.Asc,
-    },
-    context: {
-      base64UsernamePassword: accessKey
-    }
   })
 
   return (
