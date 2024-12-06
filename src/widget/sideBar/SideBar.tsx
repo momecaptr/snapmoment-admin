@@ -25,12 +25,12 @@ type MainLinksProps = {
 
 type LinksValue =
   | 'users-list'
-  | 'statistics'
+  | 'test'
   | 'payments-list'
   | 'posts-list'
 
 type MainLinksName =
-  'Users list' | 'Statistics' | 'Payments list' | 'Posts list';
+  'Users list' | 'Test' | 'Payments list' | 'Posts list';
 
 type Props = ComponentProps<'div'>;
 export const SideBar = (props: Props) => {
@@ -38,7 +38,7 @@ export const SideBar = (props: Props) => {
 
   const mainLinks: MainLinksProps[] = [
     { IconComponent: Person, name: 'Users list', path: `/users-list`, value: 'users-list' },
-    { IconComponent: TrendingUp, name: 'Statistics', path: '/statistics', value: 'statistics' },
+    { IconComponent: TrendingUp, name: 'Test', path: '/test', value: 'test' },
     { IconComponent: CreditCard, name: 'Payments list', path: '/payments-list', value: 'payments-list' },
     { IconComponent: PictureOutline, name: 'Posts list', path: '/posts-list', value: 'posts-list' }
   ];

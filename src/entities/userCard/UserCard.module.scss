@@ -1,0 +1,83 @@
+// Card.module.scss
+.card {
+  position: relative;
+  overflow: hidden;
+  width: 234px;
+}
+
+.photo {
+  // cursor: pointer;
+  overflow: hidden;
+  height: 240px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.content {
+  position: relative;
+
+  display: flex;
+  flex-flow: column nowrap;
+
+  background: var(--dark-700);
+
+  transition: transform 0.5s ease;
+
+  &.expanded {
+    // на сколько px поднять (для анимации)
+    transform: translateY(0);
+  }
+}
+
+.authorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0;
+
+  .blockBtn {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background-color: transparent;
+
+    .blockIcon {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .author {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 12px;
+    align-items: center;
+
+    .authorPhoto {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+    }
+  }
+}
+
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+
+  max-height: 72px;
+
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+
+  &.expanded {
+    display: initial;
+    max-height: 100%;
+  }
+}

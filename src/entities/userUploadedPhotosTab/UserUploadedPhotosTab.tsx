@@ -23,18 +23,6 @@ export const UserUploadedPhotosTab = ({userId} : {userId: number}) => {
       base64UsernamePassword: accessKey
     },
   })
-  const {data: notThatData2} = useGetAllPostsQuery({
-    variables: {
-      endCursorPostId: 10,
-      searchTerm,
-      pageSize: 8,
-      sortBy: newSortBy,
-      sortDirection: newSortDirection as SortDirection.Desc | SortDirection.Asc,
-    },
-    context: {
-      base64UsernamePassword: accessKey
-    }
-  })
 
   return (
     <div className={clsx(data?.getPostsByUser.items?.length === 0 ? s.empty : s.layout)}>
