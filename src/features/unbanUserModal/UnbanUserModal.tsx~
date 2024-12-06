@@ -2,10 +2,10 @@
 import s from './UnbanUserModal.module.scss';
 import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
 import {useCustomToast, useQueryParams} from "@/shared/lib";
+import {GET_ALL_USERS} from "@/graphql/queries/userData/getAllUsersData";
 import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
 import {useUnBanUserMutation} from "@/graphql/mutations/unBanUser.generated";
 import {Post} from "@/graphql/types";
-import {GET_ONE_USER} from "@/graphql/queries/userData/getOneUserData";
 
 type Props = {
   post: Post,
@@ -17,6 +17,7 @@ export const UnbanUserModal = (props: Props) => {
   const accessKey = useGetAccessKeyFromStorage()
 
   const { showToast } = useCustomToast()
+  const { pageSize, pageNumber, newSortDirection, newSortBy, banFilter, searchTerm } = useQueryParams()
 
   // Unban User
   const [unBanUser, {loading: unBanUserLoading, error: unBanUserError}] = useUnBanUserMutation()
@@ -24,18 +25,20 @@ export const UnbanUserModal = (props: Props) => {
   const unbanUserHandler = async () => {
     await unBanUser(
       {
-        context: {base64UsernamePassword: accessKey},
         variables: {userId : post.postOwner.id},
-        // ОБНОВЛЯЕМ ДАННЫЕ ЭТОГО ПОЛЬЗОВАТЕЛЯ, ЧТОБЫ УВИДИТЬ ИЗМЕНЕНИЯ БЕЗ ОБНОЛВЕНИЯ СТРАНИЦЫ
-        refetchQueries: [
-          {
-            context: { base64UsernamePassword: accessKey },
-            query: GET_ONE_USER,
-            variables: {
-              userId: post.postOwner.id,
-            },
-          },
-        ],
+        context: {base64UsernamePassword: accessKey},
+        refetchQueries: [{
+          context: { base64UsernamePassword: accessKey },
+          query: GET_ALL_USERS,
+          variables: {
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+            sortBy: newSortBy,
+            sortDirection: newSortDirection,
+            searchTerm: searchTerm,
+            statusFilter: banFilter
+          }
+        }]
       }
     )
   }

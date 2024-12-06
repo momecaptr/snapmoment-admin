@@ -21,16 +21,20 @@ export const Posts = () => {
   const triggerRef = useRef() as MutableRefObject<HTMLDivElement>;
   const accessKey = useGetAccessKeyFromStorage();
   const { debouncedSearchValue, setSearchQuery, searchTerm } = useQueryParams();
+
   const { isOpen: isBanUserModalOpen, setOpen: setIsBanUserModalOpen } = useModal(ModalKey.BanUser);
   const { isOpen: isUnBanUserModalOpen, setOpen: setIsUnBanUserModalOpen } = useModal(ModalKey.UnBanUser);
+
   const [pickedInfo, setPickedInfo] = useState<{ userId: number | undefined; userName: string | undefined }>({
     userId: undefined,
     userName: undefined,
   });
-
-  const [getAllPosts, { data: fetchedData, loading }] = useGetAllPostsLazyQuery();
   const [posts, setPosts] = useState<GetAllPostsQuery["getPosts"]["items"]>([]);
 
+  const [getAllPosts, { data: fetchedData, loading }] = useGetAllPostsLazyQuery();
+
+  // ПОЛУЧАЕМ ДАННЫЕ О НОВЫХ ПОСТАХ, БЕЗ ОБНОВЛЕНИЯ СТРАНИЦЫ ЧЕРЕЗ SUBSCRIPTION
+  const { data: postAddedData } = usePostAddedSubscription()
 
   useEffect(() => {
     if (accessKey && debouncedSearchValue !== undefined) {
@@ -67,6 +71,7 @@ export const Posts = () => {
   } as IUseInfiniteScroll);
 
   useEffect(() => {
+    console.log({itCalledAndFetched: fetchedData?.getPosts?.items});
     if (fetchedData?.getPosts?.items) {
       setPosts((prev) => {
         const newPosts = fetchedData.getPosts.items.filter(
@@ -76,6 +81,20 @@ export const Posts = () => {
       });
     }
   }, [fetchedData]);
+
+  // Обработка добавления новых постов из подписки. ЧЕРЕЗ SUBSCRIPTION МЫ ОПРЕДЕЛЯЕМ ПОЯВЛЕНИЕ НОВЫХ ПОСТОВ И ОНИ ДОБАВЛЯЮТСЯ, БЕЗ ОБНОВЛЕНИЯ СТРАНЦИЦЫ
+  useEffect(() => {
+    if (postAddedData?.postAdded) {
+      setPosts((prevPosts) => {
+        // Проверяем, нет ли поста с таким же ID в текущем списке
+        const isPostAlreadyExists = prevPosts.some((post) => post.id === postAddedData.postAdded.id);
+        if (isPostAlreadyExists) {
+          return prevPosts;
+        }
+        return [postAddedData.postAdded, ...prevPosts];
+      });
+    }
+  }, [postAddedData]);
 
   const handlePickInfoAndOpenModal = useCallback(
     ({ post, value }: { post: Post; value: string }) => {
@@ -101,7 +120,11 @@ export const Posts = () => {
         userId={pickedInfo.userId}
         pickedUserName={pickedInfo.userName}
       />
-      <UnbanUserModal isOpen={isUnBanUserModalOpen} setOpen={setIsUnBanUserModalOpen} post={fetchedData?.getPosts.items.find((post) => post.postOwner.id === pickedInfo.userId) || {} as Post}/>
+      <UnbanUserModal
+        isOpen={isUnBanUserModalOpen}
+        setOpen={setIsUnBanUserModalOpen}
+        post={fetchedData?.getPosts.items.find((post) => post.postOwner.id === pickedInfo.userId) || {} as Post}
+      />
       <div style={{ marginBottom: "20px" }}>
         <Input callback={setSearchQuery} onChange={handleSearchChange} type={"search"} currentValue={searchTerm} />
       </div>
