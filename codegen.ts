@@ -3,7 +3,8 @@ const config: CodegenConfig = {
   schema: 'https://inctagram.work/api/v1/graphql', // УКазываем enpoint на schema файл, чтобы он подхватил для автоматической типизации
   documents: [
     'src/graphql/queries/**/*.ts', // Директория с запросами
-    'src/graphql/mutations/**/*.ts' // Директория с мутациями
+    'src/graphql/mutations/**/*.ts', // Директория с мутациями
+    'src/graphql/subscriptions/**/*.ts', // Директория с подписками
   ],
   ignoreNoDocuments: true, // for better experience with the watcher
   generates: {

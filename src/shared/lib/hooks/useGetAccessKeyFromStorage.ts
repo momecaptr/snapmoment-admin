@@ -10,5 +10,5 @@ export const useGetAccessKeyFromStorage = () => {
       setAccessKey(key);
     }
   }, []);
-  return {accessKey};
+  return accessKey;
 };

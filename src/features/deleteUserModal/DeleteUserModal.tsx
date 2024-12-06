@@ -15,7 +15,7 @@ type Props = {
 };
 export const DeleteUserModal = (props: Props) => {
   const { userId, isOpen, setOpen, pickedUserName } = props;
-  const {accessKey} = useGetAccessKeyFromStorage()
+  const accessKey = useGetAccessKeyFromStorage()
 
   const { showToast } = useCustomToast()
   const { pageSize, pageNumber, newSortDirection, newSortBy, banFilter, searchTerm } = useQueryParams()

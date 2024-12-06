@@ -8,7 +8,7 @@ import {useGetOneUserQuery} from "@/graphql/queries/userData/getOneUserData.gene
 import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
 
 export const ProfileHead = ({userId} : {userId: number}) => {
-  const {accessKey} = useGetAccessKeyFromStorage()
+  const accessKey = useGetAccessKeyFromStorage()
 
   const {data} = useGetOneUserQuery({
     variables: {

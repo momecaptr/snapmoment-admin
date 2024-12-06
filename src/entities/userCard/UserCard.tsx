@@ -3,39 +3,46 @@ import {useState} from "react";
 import Image from "next/image";
 import Stub from '@/../public/epicpen_6ymMwEsBEI.png';
 import s from './UserCard.module.scss'
-import {Post} from "@/graphql/types";
-import {clsx} from "clsx";
-import {Block, Button, Typography} from "@momecap/ui-kit-snapmoment";
-import {PhotosSwiper, TimeAgo} from "@/shared/ui";
+import { Post } from "@/graphql/types";
+import { clsx } from "clsx";
+import { Block, Button, Typography } from "@momecap/ui-kit-snapmoment";
+import { PhotosSwiper, TimeAgo } from "@/shared/ui";
+import { useGetOneUserQuery } from "@/graphql/queries/userData/getOneUserData.generated";
+import { useGetAccessKeyFromStorage } from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
 
 type Props = {
   post: Post;
-  // showPostModalHandler: (isOpen: boolean, postId?: number) => void;
+  openModalHandler: (value: string) => void
 };
 
 export const UserCard = (props: Props) => {
-  const { post,
-    // showPostModalHandler,
-  } = props
+  const { post, openModalHandler } = props
   const [isShowText, setIsShowText] = useState(false);
+  const accessKey = useGetAccessKeyFromStorage() ?? localStorage.getItem('accessKey')
+  console.log('USER_CARD')
 
   const toggleShowText = () => setIsShowText(!isShowText);
 
-  const lastIndex = post?.images?.length ? post.images.length - 1 : 0;
-  const imageUrl = post?.images?.[lastIndex]?.url || Stub;
+  const { data: oneUser } = useGetOneUserQuery({
+    variables: {
+      userId: post.postOwner.id
+    },
+    context: {
+      base64UsernamePassword: accessKey
+    },
+  })
+
+  const isUserBanned = !!oneUser?.getUser.userBan?.reason
+
+  const clickHandler = () => {
+    console.log({banReason: isUserBanned, postOwnerId: post.postOwner.id, data: oneUser })
+    openModalHandler(isUserBanned ? 'unban' : 'ban' )
+  }
 
   return (
     <div className={s.card}>
-      {/*<div className={s.photo} onClick={() => showPostModalHandler(true, post.id)}>*/}
       <div className={s.photo}>
-        <PhotosSwiper sliders={(post.images ?? []) as []}/>
-        {/*<Image*/}
-        {/*  alt={'post photos'}*/}
-        {/*  height={100}*/}
-        {/*  src={imageUrl}*/}
-        {/*  width={100}*/}
-        {/*  unoptimized*/}
-        {/*/>*/}
+        <PhotosSwiper sliders={(post.images ?? []) as []} mockImg={Stub.src} />
       </div>
 
       <div className={clsx(s.content, isShowText && s.expanded)}>
@@ -49,15 +56,11 @@ export const UserCard = (props: Props) => {
               width={100}
               unoptimized
             />
-
             <Typography variant={'h3'}>{post.postOwner.userName}</Typography>
           </div>
-
-          {isShowText && (
-            <Button className={s.blockBtn} onClick={toggleShowText}>
-              <Block className={s.blockIcon}/>
-            </Button>
-          )}
+          <Button className={s.blockBtn} onClick={clickHandler} >
+            <Block className={clsx(s.blockIcon, isUserBanned && s.banned)}/>
+          </Button>
         </div>
 
         <TimeAgo time={post.createdAt as string}/>
