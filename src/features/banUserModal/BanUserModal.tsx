@@ -8,6 +8,8 @@ import * as React from "react";
 import {useEffect, useState} from "react";
 import {clsx} from "clsx";
 import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
+import {GET_ALL_POSTS} from "@/graphql/queries/posts/getAllPosts";
+import {GET_ONE_USER} from "@/graphql/queries/userData/getOneUserData";
 
 type Props = {
   userId: number|undefined;
@@ -20,7 +22,6 @@ export const BanUserModal = (props: Props) => {
   const accessKey = useGetAccessKeyFromStorage()
 
   const { showToast } = useCustomToast()
-  const { pageSize, pageNumber, newSortDirection, newSortBy, banFilter, searchTerm } = useQueryParams()
   const initialValueForBanReason = 'Reason for ban'
   const [banReason, setBanReason] = useState(initialValueForBanReason)
 
@@ -29,25 +30,21 @@ export const BanUserModal = (props: Props) => {
 
   const banUserHandler = async () => {
     await banUser({
+      context: { base64UsernamePassword: accessKey },
       variables: {
         banReason: banReason,
         userId: userId ?? 0
       },
-      context: {
-        base64UsernamePassword: accessKey
-      },
-      refetchQueries: [{
-        context: { base64UsernamePassword: accessKey },
-        query: GET_ALL_USERS,
-        variables: {
-          pageNumber: pageNumber,
-          pageSize: pageSize,
-          sortBy: newSortBy,
-          sortDirection: newSortDirection,
-          searchTerm: searchTerm,
-          statusFilter: banFilter
-        }
-      }]
+      // ОБНОВЛЯЕМ ДАННЫЕ ЭТОГО ПОЛЬЗОВАТЕЛЯ, ЧТОБЫ УВИДИТЬ ИЗМЕНЕНИЯ БЕЗ ОБНОЛВЕНИЯ СТРАНИЦЫ
+      refetchQueries: [
+        {
+          context: { base64UsernamePassword: accessKey },
+          query: GET_ONE_USER,
+          variables: {
+            userId: userId ?? 0,
+          },
+        },
+      ],
     })
   }
 

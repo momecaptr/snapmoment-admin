@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, memo } from "react";
+import React, {useState, memo, useEffect} from "react";
 import Image from "next/image";
 import Stub from "@/../public/epicpen_6ymMwEsBEI.png";
 import s from "./UserCard.module.scss";
@@ -10,6 +10,7 @@ import { Block, Button, Typography } from "@momecap/ui-kit-snapmoment";
 import { PhotosSwiper, TimeAgo } from "@/shared/ui";
 import { useGetOneUserQuery } from "@/graphql/queries/userData/getOneUserData.generated";
 import { useGetAccessKeyFromStorage } from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
+import {useCustomToast} from "@/shared/lib";
 
 type Props = {
   post: Post;
@@ -20,6 +21,7 @@ export const UserCard = memo((props: Props) => {
   const { post, openModalHandler } = props;
   const [isShowText, setIsShowText] = useState(false);
   const accessKey = useGetAccessKeyFromStorage() ?? localStorage.getItem("accessKey");
+  const { showToast } = useCustomToast()
 
   const toggleShowText = () => setIsShowText(!isShowText);
 
@@ -29,10 +31,17 @@ export const UserCard = memo((props: Props) => {
   });
 
   const isUserBanned = !!oneUser?.getUser.userBan?.reason;
+  console.log({isUserBanned, soloUser: oneUser?.getUser.userBan?.reason, fromPostsQuery: post.userBan?.reason })
 
   const clickHandler = () => {
     openModalHandler(isUserBanned ? "unban" : "ban");
   };
+
+  useEffect(() => {
+    if(post.userBan?.reason !== oneUser?.getUser.userBan?.reason) {
+      showToast({message: 'Something bad happened. Please refresh the page', type: 'error' })
+    }
+  }, []);
 
   return (
     <div className={s.card}>
