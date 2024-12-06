@@ -71,8 +71,6 @@ export const UserPaymentsTable = (props: Props) => {
     })
     : [];
 
-  console.log({allPaymentsData: allPaymentsData?.getPayments, oneUserPayments: oneUserPayments?.getPaymentsByUser})
-
   const handleSortClick = (title: string) => {
     if(title.toLowerCase() !== 'username' || title.length > 0) {
       setSortByQuery(title);

@@ -12,13 +12,12 @@ import {GET_ALL_POSTS} from "@/graphql/queries/posts/getAllPosts";
 import {GET_ONE_USER} from "@/graphql/queries/userData/getOneUserData";
 
 type Props = {
-  userId: number|undefined;
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
-  pickedUserName: string | null | undefined
+  pickedUserIdAndName: {userId: number | undefined; userName: string | undefined}
 };
 export const BanUserModal = (props: Props) => {
-  const { userId, isOpen, setOpen, pickedUserName } = props;
+  const { isOpen, setOpen, pickedUserIdAndName } = props;
   const accessKey = useGetAccessKeyFromStorage()
 
   const { showToast } = useCustomToast()
@@ -33,7 +32,7 @@ export const BanUserModal = (props: Props) => {
       context: { base64UsernamePassword: accessKey },
       variables: {
         banReason: banReason,
-        userId: userId ?? 0
+        userId: pickedUserIdAndName.userId ?? 0
       },
       // ОБНОВЛЯЕМ ДАННЫЕ ЭТОГО ПОЛЬЗОВАТЕЛЯ, ЧТОБЫ УВИДИТЬ ИЗМЕНЕНИЯ БЕЗ ОБНОЛВЕНИЯ СТРАНИЦЫ
       refetchQueries: [
@@ -41,7 +40,7 @@ export const BanUserModal = (props: Props) => {
           context: { base64UsernamePassword: accessKey },
           query: GET_ONE_USER,
           variables: {
-            userId: userId ?? 0,
+            userId: pickedUserIdAndName.userId,
           },
         },
       ],
@@ -68,7 +67,7 @@ export const BanUserModal = (props: Props) => {
         (
           <>
             <div className={s.text}>
-              <Typography variant={'regular_text_16'}>Are you sure you want to ban user {pickedUserName}?</Typography>
+              <Typography variant={'regular_text_16'}>Are you sure you want to ban user {pickedUserIdAndName.userName}?</Typography>
             </div>
             <div className={s.select}>
               <SelectUI selectOptions={selectOptionsForBanUserAction} className={s.selector} value={banReason} onValueChange={setBanReason} initialValue={initialValueForBanReason} />

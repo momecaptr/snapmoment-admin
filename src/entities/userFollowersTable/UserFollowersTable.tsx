@@ -67,8 +67,6 @@ export const UserFollowersTable = (props: Props) => {
     })
     : [];
 
-  console.log({userFollowers: userFollowers?.getFollowers})
-
   const handleSortClick = (title: string) => {
     if(title.toLowerCase() !== 'username' || title.length > 0) {
       setSortByQuery(title);
