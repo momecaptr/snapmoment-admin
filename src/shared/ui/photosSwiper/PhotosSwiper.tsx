@@ -8,12 +8,12 @@ import Image from "next/image";
 import { Swiper as SwiperProps } from "swiper";
 import { Keyboard, Mousewheel, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { ArrowIosBack, ArrowIosForward } from "@momecap/ui-kit-snapmoment";
 
 import "swiper/scss";
 import "swiper/scss/pagination";
 
 import s from "./PhotosSwiper.module.scss";
-import { ArrowIosBack, ArrowIosForward } from "@momecap/ui-kit-snapmoment";
 
 // Ниже экстенд от этого типа, что гарантирует, что передаваемый массив объектов будет принят без ошибок, если в нем есть свойство url
 type HasUrl = { url: null | string | undefined };
@@ -23,6 +23,8 @@ type Props<T extends HasUrl> = {
   classNameImage?: string;
   classNameSwiperSlide?: string;
   getIndex?: (val: number) => void;
+  isModal?: boolean; // Новый пропс для модального или не модального режима. По умолчанию сделаем true, а там где кучей рендерим - там будем ставить в false
+  isSwiperComplexRef?: boolean; // Флаг для определения какой ref будет для slider
   mockImg?: string;
   sliders: T[];
   styles?: string;
@@ -30,6 +32,10 @@ type Props<T extends HasUrl> = {
 
 /**
  * Компонент `PhotosSwiper` — карусель изображений с поддержкой навигации и пагинации.
+ * Тут магическое свойство isSwiperComplexRef -- если передадим true, то для серверного рендера ref будет считаться через Math, а не по url.
+ * Если isSwiperComplexRef = false, то ref будет определяться по url картинок в посте.
+ * Я не знаю почему, но если ref для Swiper определяется только по url (довольно уникально), то возникают проблемы отображения буллетов в swiperPagination (точки внизу свайпера, которые определяют на какой фотке сейчас находимся)
+ * Поэтому решено через вот этот флаг. И так работает.
  * @template T - Тип, который расширяет интерфейс `HasUrl`. HasUrl - тип с параметром url: string. Короче, принимает массив любых объектов, но обязательно должен быть url
  * @param {string} className - Дополнительные классы для стилизации контейнера карусели.
  * @param {string} classNameImage - Дополнительные классы для стилизации изображений.
@@ -38,21 +44,28 @@ type Props<T extends HasUrl> = {
  * @param {T[]} sliders - Массив объектов с изображениями, содержащими URL. Короче, принимает массив любых объектов, но обязательно должен быть url
  * @param {string} styles - Стиль фильтра, применяемый к изображению. ИНЛАЙНОВЫЙ
  * @param {string} mockImg - URL мокового изображения, если не будет фотографий в массиве sliders
+ * @param {boolean} isSwiperComplexRef - Флаг для определения какой ref будет для slider (true => считается по Math, false => считается по url)
  */
 export const PhotosSwiper = <T extends HasUrl>({
-   className,
-   classNameImage,
-   classNameSwiperSlide,
-   getIndex,
-   mockImg,
-   sliders,
-   styles
- }: Props<T>) => {
+  className,
+  classNameImage,
+  classNameSwiperSlide,
+  getIndex,
+  isSwiperComplexRef = false,
+  mockImg,
+  sliders,
+  styles
+}: Props<T>) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const swiperRef = useRef<SwiperProps | null>(null);
 
-  // Уникальный идентификатор для `data-` атрибутов
-  const uniqueId = useRef(`swiper-${Math.random().toString(36).substr(2, 9)}`);
+  // // Уникальный идентификатор для `data-` атрибутов
+  const mathRef = useRef(`swiper-${Math.random().toString(36).substr(2, 9)}`);
+
+  // Используем стабильный ID, который будет одинаковым на сервере и клиенте.
+  const refThroughUrl = useRef(`swiper-${sliders.map((slider) => slider.url).join('-')}`);
+
+  const uniqueId = isSwiperComplexRef ? refThroughUrl : mathRef;
 
   const handleSwiperInit = (swiper: SwiperProps) => {
     swiperRef.current = swiper;
@@ -109,7 +122,7 @@ export const PhotosSwiper = <T extends HasUrl>({
               src={photo.url || ''}
               style={styles ? { filter: styles } : {}}
               width={100}
-              unoptimized={false}
+              unoptimized
             />
           </SwiperSlide>
         ))}
