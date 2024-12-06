@@ -1,19 +1,18 @@
 "use client"
 import s from './UnbanUserModal.module.scss';
-import {Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
-import {useCustomToast, useQueryParams} from "@/shared/lib";
-import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
-import {useUnBanUserMutation} from "@/graphql/mutations/unBanUser.generated";
-import {Post} from "@/graphql/types";
-import {GET_ONE_USER} from "@/graphql/queries/userData/getOneUserData";
+import { Button, Modal, Typography} from "@momecap/ui-kit-snapmoment";
+import { useCustomToast } from "@/shared/lib";
+import { useGetAccessKeyFromStorage } from "@/shared/lib/hooks/useGetAccessKeyFromStorage";
+import { useUnBanUserMutation } from "@/graphql/mutations/unBanUser.generated";
+import { GET_ONE_USER } from "@/graphql/queries/userData/getOneUserData";
 
 type Props = {
-  post: Post,
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
+  pickedUserIdAndName: {userId: number | undefined; userName: string | undefined}
 };
 export const UnbanUserModal = (props: Props) => {
-  const { isOpen, setOpen, post } = props;
+  const { isOpen, setOpen, pickedUserIdAndName } = props;
   const accessKey = useGetAccessKeyFromStorage()
 
   const { showToast } = useCustomToast()
@@ -25,14 +24,14 @@ export const UnbanUserModal = (props: Props) => {
     await unBanUser(
       {
         context: {base64UsernamePassword: accessKey},
-        variables: {userId : post.postOwner.id},
+        variables: {userId : pickedUserIdAndName.userId!},
         // ОБНОВЛЯЕМ ДАННЫЕ ЭТОГО ПОЛЬЗОВАТЕЛЯ, ЧТОБЫ УВИДИТЬ ИЗМЕНЕНИЯ БЕЗ ОБНОЛВЕНИЯ СТРАНИЦЫ
         refetchQueries: [
           {
             context: { base64UsernamePassword: accessKey },
             query: GET_ONE_USER,
             variables: {
-              userId: post.postOwner.id,
+              userId: pickedUserIdAndName.userId,
             },
           },
         ],
@@ -60,7 +59,7 @@ export const UnbanUserModal = (props: Props) => {
         (
           <>
             <div className={s.text}>
-              <Typography variant={'regular_text_16'}>Are you sure you want to unban user {post.postOwner?.userName ?? '' }?</Typography>
+              <Typography variant={'regular_text_16'}>Are you sure you want to unban user {pickedUserIdAndName.userName}?</Typography>
             </div>
             <div className={s.buttonsWrapper}>
               <Button onClick={noHandler} variant={'outlined'}>

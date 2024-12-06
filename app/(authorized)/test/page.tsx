@@ -19,7 +19,6 @@ export default function Page () {
     skip: !accessKey
   })
 
-  console.log({testData})
   if (loading) return <div>Loading...</div>;
   return (
     <div>

@@ -20,7 +20,6 @@ const slice = createSlice({
     },
     isPhotoInState: (state, action: PayloadAction<boolean>) => {
       state.isPhotoInState = action.payload;
-      console.log(state.isPhotoInState);
     },
     setTheme: (state, action: PayloadAction<{ theme: Theme }>) => {
       state.theme = action.payload.theme;

@@ -25,7 +25,7 @@ export const Posts = () => {
   const { isOpen: isBanUserModalOpen, setOpen: setIsBanUserModalOpen } = useModal(ModalKey.BanUser);
   const { isOpen: isUnBanUserModalOpen, setOpen: setIsUnBanUserModalOpen } = useModal(ModalKey.UnBanUser);
 
-  const [pickedInfo, setPickedInfo] = useState<{ userId: number | undefined; userName: string | undefined }>({
+  const [pickedUserIdAndName, setPickedUserIdAndName] = useState<{ userId: number | undefined; userName: string | undefined }>({
     userId: undefined,
     userName: undefined,
   });
@@ -71,7 +71,6 @@ export const Posts = () => {
   } as IUseInfiniteScroll);
 
   useEffect(() => {
-    console.log({itCalledAndFetched: fetchedData?.getPosts?.items});
     if (fetchedData?.getPosts?.items) {
       setPosts((prev) => {
         const newPosts = fetchedData.getPosts.items.filter(
@@ -98,7 +97,7 @@ export const Posts = () => {
 
   const handlePickInfoAndOpenModal = useCallback(
     ({ post, value }: { post: Post; value: string }) => {
-      setPickedInfo({ userId: post.postOwner.id, userName: post.postOwner.userName });
+      setPickedUserIdAndName({ userId: post.postOwner.id, userName: post.postOwner.userName });
       if (value === "ban") {
         setIsBanUserModalOpen(true);
       } else {
@@ -117,13 +116,12 @@ export const Posts = () => {
       <BanUserModal
         isOpen={isBanUserModalOpen}
         setOpen={setIsBanUserModalOpen}
-        userId={pickedInfo.userId}
-        pickedUserName={pickedInfo.userName}
+        pickedUserIdAndName={pickedUserIdAndName}
       />
       <UnbanUserModal
         isOpen={isUnBanUserModalOpen}
         setOpen={setIsUnBanUserModalOpen}
-        post={fetchedData?.getPosts.items.find((post) => post.postOwner.id === pickedInfo.userId) || {} as Post}
+        pickedUserIdAndName={pickedUserIdAndName}
       />
       <div style={{ marginBottom: "20px" }}>
         <Input callback={setSearchQuery} onChange={handleSearchChange} type={"search"} currentValue={searchTerm} />
