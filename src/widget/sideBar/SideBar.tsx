@@ -9,11 +9,8 @@ import s from './SideBar.module.scss';
 import {
   PictureOutline,
   Person,
-  TrendingUp,
   CreditCard,
   Typography,
-  Button,
-  LogOutOutline
 } from "@momecap/ui-kit-snapmoment";
 
 type MainLinksProps = {
@@ -25,12 +22,11 @@ type MainLinksProps = {
 
 type LinksValue =
   | 'users-list'
-  | 'test'
   | 'payments-list'
   | 'posts-list'
 
 type MainLinksName =
-  'Users list' | 'Test' | 'Payments list' | 'Posts list';
+  'Users list' | 'Payments list' | 'Posts list';
 
 type Props = ComponentProps<'div'>;
 export const SideBar = (props: Props) => {
@@ -38,7 +34,6 @@ export const SideBar = (props: Props) => {
 
   const mainLinks: MainLinksProps[] = [
     { IconComponent: Person, name: 'Users list', path: `/users-list`, value: 'users-list' },
-    { IconComponent: TrendingUp, name: 'Test', path: '/test', value: 'test' },
     { IconComponent: CreditCard, name: 'Payments list', path: '/payments-list', value: 'payments-list' },
     { IconComponent: PictureOutline, name: 'Posts list', path: '/posts-list', value: 'posts-list' }
   ];
