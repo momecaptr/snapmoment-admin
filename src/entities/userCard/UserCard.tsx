@@ -37,12 +37,6 @@ export const UserCard = memo((props: Props) => {
     openModalHandler(isUserBanned ? "unban" : "ban");
   };
 
-  useEffect(() => {
-    if(post.userBan?.reason !== oneUser?.getUser.userBan?.reason) {
-      showToast({message: 'Something bad happened. Please refresh the page', type: 'error' })
-    }
-  }, []);
-
   return (
     <div className={s.card}>
       <div className={s.photo}>
