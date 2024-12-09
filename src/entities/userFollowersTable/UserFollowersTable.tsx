@@ -47,8 +47,8 @@ export const UserFollowersTable = (props: Props) => {
   }
 
   const transformedData: TransformedFollowersDataSingleObj[] = userFollowers
-    // ? userFollowers?.getFollowers.items.map((item) => {
-    ? mockData.map((item) => {
+    ? userFollowers?.getFollowers.items.map((item) => {
+    // ? mockData.map((item) => {
       return {
         userId: item.id,
         username: item.userName,
@@ -95,14 +95,14 @@ export const UserFollowersTable = (props: Props) => {
         globalStyle={s.marginTableBtm}
       />
       {/*{!loading && userFollowers && userFollowers.getFollowers.totalCount > 0 && <PaginationWithSelect*/}
-      {!loading && <PaginationWithSelect
+      {!loading && userFollowers && userFollowers.getFollowers.totalCount > 0 && <PaginationWithSelect
 				pageNumber={pageNumber}
 				pageSize={pageSize}
 				selectOptions={selectOptionsForPagination}
 				setPageNumber={setCurrentPageQuery}
 				setPageSize={setPageSizeQuery}
-				// totalItems={userFollowers?.getFollowers.totalCount ?? 1}
-				totalItems={mockData.length}
+				totalItems={userFollowers?.getFollowers.totalCount ?? 1}
+				// totalItems={mockData.length}
 				alignment={'left'}
 			/>}
     </>
