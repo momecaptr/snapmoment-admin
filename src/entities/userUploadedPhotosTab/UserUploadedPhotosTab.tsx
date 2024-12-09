@@ -20,7 +20,7 @@ export const UserUploadedPhotosTab = ({userId} : {userId: number}) => {
       userId,
     },
     context: {
-      base64UsernamePassword: accessKey
+      base64UsernamePassword: accessKey,
     },
   })
 
