@@ -94,7 +94,6 @@ export const UserFollowersTable = (props: Props) => {
         colsStyles={s.columnsWidth}
         globalStyle={s.marginTableBtm}
       />
-      {/*{!loading && userFollowers && userFollowers.getFollowers.totalCount > 0 && <PaginationWithSelect*/}
       {!loading && userFollowers && userFollowers.getFollowers.totalCount > 0 && <PaginationWithSelect
 				pageNumber={pageNumber}
 				pageSize={pageSize}
@@ -102,7 +101,6 @@ export const UserFollowersTable = (props: Props) => {
 				setPageNumber={setCurrentPageQuery}
 				setPageSize={setPageSizeQuery}
 				totalItems={userFollowers?.getFollowers.totalCount ?? 1}
-				// totalItems={mockData.length}
 				alignment={'left'}
 			/>}
     </>
