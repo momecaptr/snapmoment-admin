@@ -31,7 +31,6 @@ export const UserCard = memo((props: Props) => {
   });
 
   const isUserBanned = !!oneUser?.getUser.userBan?.reason;
-  console.log({isUserBanned, soloUser: oneUser?.getUser.userBan?.reason, fromPostsQuery: post.userBan?.reason })
 
   const clickHandler = () => {
     openModalHandler(isUserBanned ? "unban" : "ban");
