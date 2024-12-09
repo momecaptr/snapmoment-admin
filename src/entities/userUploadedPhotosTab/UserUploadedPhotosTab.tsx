@@ -12,7 +12,7 @@ import {useGetAccessKeyFromStorage} from "@/shared/lib/hooks/useGetAccessKeyFrom
 
 export const UserUploadedPhotosTab = ({userId} : {userId: number}) => {
 
-  const accessKey = useGetAccessKeyFromStorage()
+  const accessKey = useGetAccessKeyFromStorage();
 
   const {searchTerm, newSortDirection, newSortBy} = useQueryParams()
   const {data} = useGetPostsByUserQuery({

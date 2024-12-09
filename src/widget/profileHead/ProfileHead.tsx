@@ -17,9 +17,15 @@ export const ProfileHead = ({userId} : {userId: number}) => {
     context: {
       base64UsernamePassword: accessKey
     },
+    skip: !accessKey
   })
 
   const userData = data?.getUser
+
+  if (typeof window === "undefined") {
+    // На сервере компонент может вернуть временный пустой JSX.
+    return null; // Или какой-то серверный fallback.
+  }
 
   return (
     <div className={s.about}>

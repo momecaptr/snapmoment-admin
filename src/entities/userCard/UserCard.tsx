@@ -20,7 +20,7 @@ type Props = {
 export const UserCard = memo((props: Props) => {
   const { post, openModalHandler } = props;
   const [isShowText, setIsShowText] = useState(false);
-  const accessKey = useGetAccessKeyFromStorage() ?? localStorage.getItem("accessKey");
+  const accessKey = useGetAccessKeyFromStorage();
   const { showToast } = useCustomToast()
 
   const toggleShowText = () => setIsShowText(!isShowText);
