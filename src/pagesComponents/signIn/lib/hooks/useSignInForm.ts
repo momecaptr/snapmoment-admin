@@ -1,3 +1,4 @@
+"use client"
 import { useForm } from 'react-hook-form';
 import { useCustomToast } from '@/shared/lib';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,27 +23,44 @@ export const useSignInForm = () => {
 
   const onSubmit = async (data: SignInAdminSchemaType) => {
     // REFETCH QUERIES НАДО??? -- позволяет выполнить другие запросы сразу после выполнения этого запроса; также позволяет создать параметры для context-а -- а мы помним, что нужно указывать authorization
-    await login(
-      {
+    try {
+      await login({
         variables: {
-          email: data.email, password: data.password
+          email: data.email,
+          password: data.password,
         },
         onCompleted: (res) => {
-          if(res.loginAdmin.logged === true) {
-            temp = btoa(`${data.email}:${data.password}`)
-            localStorage.setItem('accessKey', temp)
-            showToast({message: 'Login success', type: 'success' })
-            router.push('/users-list')
+          if (res.loginAdmin.logged === true) {
+            try {
+              const temp = btoa(`${data.email}:${data.password}`);
+              if (typeof window !== "undefined") {
+                localStorage.setItem("accessKey", temp);
+              }
+              showToast({ message: "Login success", type: "success" });
+              router.push("/users-list");
+            } catch (err) {
+              console.error("Failed to save accessKey to localStorage:", err);
+            }
           } else {
-            showToast({message: 'Wrong password or username', type: 'error' })
+            localStorage.removeItem("accessKey"); // Очистка данных
+            showToast({ message: "Wrong password or username", type: "error" });
           }
         },
         onError: (e) => {
-          console.log(e)
-          showToast({message: `Something bad happened, ${e}, ${error}}. Try again later`, type: 'error' })
+          console.error(e);
+          showToast({
+            message: `Something bad happened, ${e.message}. Try again later`,
+            type: "error",
+          });
         },
-        context: {base64UsernamePassword: temp},
-      })
+      });
+    } catch (e) {
+      console.error("Unexpected error:", e);
+      showToast({
+        message: `Unexpected error occurred. Try again later.`,
+        type: "error",
+      });
+    }
   };
 
   return {

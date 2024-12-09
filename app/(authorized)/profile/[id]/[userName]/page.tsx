@@ -1,3 +1,4 @@
+"use client"
 import {ProfileData} from "@/pagesComponents";
 
 type Props = {
